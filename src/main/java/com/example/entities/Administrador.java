@@ -10,13 +10,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-
+@Table(name = "administradores")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,11 +32,15 @@ public class Administrador implements Serializable{
     private long id; 
 
     private String nombre; 
+    private String apellidos;
+    private String correo; 
+    private String telefono; 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "administrador")
     private List<Comprador> compradores; 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "administrador")
     private List<Proveedor> proveedores; 
+    
 
 }
