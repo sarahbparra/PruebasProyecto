@@ -41,7 +41,7 @@ public class ProductoController {
 
        List<Producto> productos = new ArrayList<>(); 
 
-       Sort sortByNombre = Sort.by("descripcion");  
+       Sort sortByNombre = Sort.by("nombre");  
 
        if(page != null && size != null){
 
