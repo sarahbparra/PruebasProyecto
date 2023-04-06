@@ -88,6 +88,7 @@ public class AdministradorController {
 
     // Obtener un administrador por su id:
     // FUNCIONA
+    // falta mensaje de que no se ha podido!!!!
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> findById(@PathVariable(name = "id") Long id) {
         Map<String, Object> responseAsMap = new HashMap<>();
@@ -103,8 +104,9 @@ public class AdministradorController {
                 responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.OK);
             } else {
                 String errorMessage = "No se ha podido encontrar el administrador con id: " + id;
-                responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 responseAsMap.put("errores", errorMessage);
+
+                responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
             String errorGrave = "Error grave";
@@ -115,14 +117,16 @@ public class AdministradorController {
         return responseEntity;
     }
 
-    // Crear un nuevo administrador
+    // Crear un nuevo administrador.
+    // OJO: si en el cuerpo mantienes un id que ya existe, modificará los datos de
+    // ese administrador
     // FUNCIONA
     @PostMapping("/create")
     @Transactional
     public ResponseEntity<Map<String, Object>> createAdministrador(
             @Valid @RequestBody Administrador administrador,
             BindingResult result) {
-
+        ResponseEntity<Map<String, Object>> responseEntity = null;
         Map<String, Object> responseAsMap = new HashMap<>();
 
         // Si hay que comprobar si hay errores en el administrador recibido
@@ -146,7 +150,7 @@ public class AdministradorController {
                 responseAsMap.put("administrador", adminDataBase);
                 // Se devuelve la respuesta con el administrador creado y un código de estado
                 // CREATED
-                return new ResponseEntity<>(responseAsMap, HttpStatus.CREATED);
+                responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.CREATED);
             }
 
         } catch (DataAccessException e) {
@@ -156,11 +160,14 @@ public class AdministradorController {
             String errorGrave = "Se ha producido un error grave, y la causa más probable puede ser: "
                     + e.getMostSpecificCause();
             responseAsMap.put("errorGrave", errorGrave);
-            return new ResponseEntity<>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return responseEntity;
     }
 
-    // Actualizar un administrador existente
+    // Actualizar un administrador existente. OJO: si pones un id que no exite, lo
+    // creará con el siguiente id autogenerado
+    // FUNCIONA
     @PutMapping("/update/{id}")
     @Transactional
     public ResponseEntity<Map<String, Object>> updateAdministrador(
@@ -169,6 +176,7 @@ public class AdministradorController {
             @PathVariable(name = "id") Integer id) {
 
         Map<String, Object> responseAsMap = new HashMap<>();
+        ResponseEntity<Map<String, Object>> responseEntity = null;
 
         // Si hay que comprobar si hay errores en el administrador recibido
         if (result.hasErrors()) {
@@ -177,21 +185,29 @@ public class AdministradorController {
             for (ObjectError error : result.getAllErrors()) {
                 errorMessages.add(error.getDefaultMessage());
             } // ALTERNATIVA: convertir for en stream con expresión lambda
+
             responseAsMap.put("errores", errorMessages);
             // Se devuelve la respuesta con los errores y un código de estado BAD REQUEST
             return new ResponseEntity<>(responseAsMap, HttpStatus.BAD_REQUEST);
         }
+
+        // Si no hay errores, entonces persistimos el producto. Para ello se vicula,
+        // previamente, el id que se recibe con el producto
+        administrador.setId(id);
+        Administrador adminDataBase = administradorService.save(administrador);
+
         try {
-            // Se guarda el administrador en la base de datos
-            Producto
-            Administrador adminDataBase = administradorService.save(administrador);
+
             // Se crea la respuesta con un mensaje de éxito y el administrador creado
-            String mensaje = "El administrador se ha creado correctamente";
-            responseAsMap.put("mensaje", mensaje);
-            responseAsMap.put("administrador", adminDataBase);
-            // Se devuelve la respuesta con el administrador creado y un código de estado
-            // CREATED
-            return new ResponseEntity<>(responseAsMap, HttpStatus.CREATED);
+            if (adminDataBase != null) {
+                String mensaje = "El producto se ha actualizado correctamente";
+                responseAsMap.put("mensaje", mensaje);
+                responseAsMap.put("producto", adminDataBase);
+                // Se devuelve la respuesta con el administrador creado y un código de estado
+                // CREATED
+                responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap,
+                        HttpStatus.OK);
+            }
 
         } catch (DataAccessException e) {
             // Si ocurre una excepción al guardar el administrador, se devuelve una
@@ -199,29 +215,18 @@ public class AdministradorController {
             // y un código de estado INTERNAL SERVER ERROR
             String errorGrave = "Se ha producido un error grave, y la causa más probable puede ser: "
                     + e.getMostSpecificCause();
+
             responseAsMap.put("errorGrave", errorGrave);
-            return new ResponseEntity<>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return responseEntity;
+
     }
 
-}
-
-    // @PutMapping("/update/{id}")
-    // @Transactional
-    // public ResponseEntity<Administrador> update(@PathVariable("id") long id,
-    // @RequestBody Administrador administrador) {
-    // Administrador administradorExistente = administradorService.findById(id);
-    // if (administradorExistente != null) {
-    // administrador.setId(id);
-    // Administrador administradorActualizado =
-    // administradorService.save(administrador);
-    // return ResponseEntity.ok(administradorActualizado);
-    // } else {
-    // return ResponseEntity.notFound().build();
-    // }
-    // }
-
     // Eliminar un administrador por su id
+    // FUNCIONA, no da mensaje de no borrado si no existe
     @DeleteMapping("/delete/{id}")
     @Transactional
     public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
