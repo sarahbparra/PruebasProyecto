@@ -12,14 +12,14 @@ import com.example.entities.Proveedor;
 
 public interface ProveedorDao extends JpaRepository<Proveedor, Long>{
 
-    @Query(value = "select p from Proveedor p left join fetch p.administrador")
+    // @Query(value = "select p from proveedores p left join fetch p.administradores")
     public List<Proveedor> findAll(Sort sort); 
 
-    @Query(value = "select p from Proveedor p left join fetch p.administrador", 
-    countQuery = "select count(p) from Proveedor p left join p.administrador")
+    // @Query(value = "select p from proveedores p left join fetch p.administradores", 
+    // countQuery = "select count(p) from Proveedor p left join p.administradores")
     public Page<Proveedor> findAll(Pageable pageable); 
 
-    @Query(value = "select p  from Proveedor p left join fetch p.administrador where p.id = :id") 
+    // @Query(value = "select p  from proveedores p left join fetch p.administradores where p.id = :id") 
     public Proveedor findById(long id); 
     
 }

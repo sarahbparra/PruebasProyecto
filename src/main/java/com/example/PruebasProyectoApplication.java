@@ -49,10 +49,10 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.telefono("telAdmin2")
 				.build());
 
-		// proveedorService.save(Proveedor.builder()
-		// .id(1)
-		// 		.nombre("prove1")
-		// 		.administrador(administradorService.findById(1))
-		// 		.build());
+		proveedorService.save(Proveedor.builder()
+		.id(1)
+				.nombre("prove1")
+				.administrador(administradorService.findById(1))
+				.build());
 	}
 }
