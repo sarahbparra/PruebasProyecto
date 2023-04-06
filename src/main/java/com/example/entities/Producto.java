@@ -28,7 +28,7 @@ public class Producto implements Serializable{
    private static final long serialVersionUID = 1L; 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private long id; 
+    private int id; 
 
     private String nombre; 
     private String descripcion;
@@ -41,5 +41,5 @@ public class Producto implements Serializable{
     @JsonBackReference
     private Proveedor proveedor; 
 
-    private String imagenProducto;
+   // private String imagenProducto;
 }
