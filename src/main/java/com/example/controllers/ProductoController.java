@@ -139,166 +139,166 @@ private FileDownloadUtil fileDownloadUtil;
     }
 
  /**Método que guarda (persiste) un producto en la base de datos */
-//  @PostMapping
-//  //(consumes = "multipart/form-data")
-//  @Transactional
-//  public ResponseEntity<Map<String, Object>> insert(@Valid 
-//  @RequestPart(name = "producto") Producto producto,
-//   BindingResult result, @RequestPart(name = "file") MultipartFile file) throws IOException {
-//      Map<String, Object> responseAsMap = new HashMap<>();
-//      ResponseEntity<Map<String, Object>> responseEntity = null;
+ @PostMapping
+ //(consumes = "multipart/form-data")
+ @Transactional
+ public ResponseEntity<Map<String, Object>> insert(@Valid 
+ @RequestPart(name = "producto") Producto producto,
+  BindingResult result, @RequestPart(name = "file") MultipartFile file) throws IOException {
+     Map<String, Object> responseAsMap = new HashMap<>();
+     ResponseEntity<Map<String, Object>> responseEntity = null;
 
-//      /** Primero comprobar si hay errores en el producto recibido */
+     /** Primero comprobar si hay errores en el producto recibido */
 
-//      if (result.hasErrors()) {
-//          List<String> errorMessages = new ArrayList<>();
+     if (result.hasErrors()) {
+         List<String> errorMessages = new ArrayList<>();
 
-//          for (ObjectError error : result.getAllErrors()) {
+         for (ObjectError error : result.getAllErrors()) {
 
-//              errorMessages.add(error.getDefaultMessage());
+             errorMessages.add(error.getDefaultMessage());
 
-//          }
-//          responseAsMap.put("errores", errorMessages);
+         }
+         responseAsMap.put("errores", errorMessages);
 
-//          responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.BAD_REQUEST);
+         responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.BAD_REQUEST);
 
-//          return responseEntity;
-//      }
-//      /** Si no hay erroes, entonces persistimos el producto
-//      , comprobando previamente si nos han enviado una imágen
-//      o un archivo adjunto*/ 
+         return responseEntity;
+     }
+     /** Si no hay erroes, entonces persistimos el producto
+     , comprobando previamente si nos han enviado una imágen
+     o un archivo adjunto*/ 
 
-//      if(!file.isEmpty()) {
-//          String fileCode = fileUploadUtil.saveFile(file.getOriginalFilename(), file);
+     if(!file.isEmpty()) {
+         String fileCode = fileUploadUtil.saveFile(file.getOriginalFilename(), file);
      
-//          producto.setImagenProducto(fileCode + "-" + file.getOriginalFilename());
+         producto.setImagenProducto(fileCode + "-" + file.getOriginalFilename());
 
-//          //Devolver información respecto al file rebicido
+         //Devolver información respecto al file rebicido
 
-//          FileUploadResponse fileUploadResponse = FileUploadResponse.builder()
-//          .fileName(fileCode + "-" + file.getOriginalFilename())
-//          .downloadURI("/productos/downloadFile/" + fileCode + "-" + file.getOriginalFilename())
-//          .size(file.getSize()).build();
+         FileUploadResponse fileUploadResponse = FileUploadResponse.builder()
+         .fileName(fileCode + "-" + file.getOriginalFilename())
+         .downloadURI("/productos/downloadFile/" + fileCode + "-" + file.getOriginalFilename())
+         .size(file.getSize()).build();
 
-//          responseAsMap.put("info de la imagen: ", fileUploadResponse);
+         responseAsMap.put("info de la imagen: ", fileUploadResponse);
 
-//      }
+     }
 
-//      Producto productoDB = productoService.save(producto);
+     Producto productoDB = productoService.save(producto);
 
    
 
-//      try {
+     try {
 
-//          if (productoDB != null) {
-//              String mensaje = "El producto se ha creado correctamente";
-//              responseAsMap.put("mensaje", mensaje);
-//              responseAsMap.put("producto", productoDB);
-//              responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.CREATED);
-//          } else {
-//              // No se ha creado el producto
-//              responseAsMap.put("mensaje", "No se ha podido crear el producto");
-//              responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//          }
+         if (productoDB != null) {
+             String mensaje = "El producto se ha creado correctamente";
+             responseAsMap.put("mensaje", mensaje);
+             responseAsMap.put("producto", productoDB);
+             responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.CREATED);
+         } else {
+             // No se ha creado el producto
+             responseAsMap.put("mensaje", "No se ha podido crear el producto");
+             responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+         }
 
-//      } catch (DataAccessException e) {
-//          String errorGrave = "Ha tenido lugar un error grave" + ", y la causa más probable puede ser "
-//                  + e.getMostSpecificCause();
-//          responseAsMap.put("errorGrave", errorGrave);
-//          responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
-//      }
+     } catch (DataAccessException e) {
+         String errorGrave = "Ha tenido lugar un error grave" + ", y la causa más probable puede ser "
+                 + e.getMostSpecificCause();
+         responseAsMap.put("errorGrave", errorGrave);
+         responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
+     }
 
-//      return responseEntity;
+     return responseEntity;
 
-//  }
+ }
 
-// /**Actualizo un producto en la base de datos */
+/**Actualizo un producto en la base de datos */
 
-// @PutMapping("/{id}")
-//  @Transactional
-//  public ResponseEntity<Map<String, Object>> update(@Valid @RequestBody Producto producto, 
-//          BindingResult result, @PathVariable(name = "id") Integer id) {
+@PutMapping("/{id}")
+ @Transactional
+ public ResponseEntity<Map<String, Object>> update(@Valid @RequestBody Producto producto, 
+         BindingResult result, @PathVariable(name = "id") Integer id) {
 
-//      Map<String, Object> responseAsMap = new HashMap<>();
-//      ResponseEntity<Map<String, Object>> responseEntity = null;
+     Map<String, Object> responseAsMap = new HashMap<>();
+     ResponseEntity<Map<String, Object>> responseEntity = null;
 
-//      /** Primero comprobar si hay errores en el producto recibido */
+     /** Primero comprobar si hay errores en el producto recibido */
 
-//      if (result.hasErrors()) {
-//          List<String> errorMessages = new ArrayList<>();
+     if (result.hasErrors()) {
+         List<String> errorMessages = new ArrayList<>();
 
-//          for (ObjectError error : result.getAllErrors()) {
+         for (ObjectError error : result.getAllErrors()) {
 
-//              errorMessages.add(error.getDefaultMessage());
+             errorMessages.add(error.getDefaultMessage());
 
-//          }
-//          responseAsMap.put("errores", errorMessages);
+         }
+         responseAsMap.put("errores", errorMessages);
 
-//          responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.BAD_REQUEST);
+         responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.BAD_REQUEST);
 
-//          return responseEntity;
-//      }
-//      // Si no hay erroes, entonces persistimos el producto
-//      //Vinculando previamente el id que se recibe con el producto
-//      producto.setId(id);
-//      Producto productoDB = productoService.save(producto);
+         return responseEntity;
+     }
+     // Si no hay erroes, entonces persistimos el producto
+     //Vinculando previamente el id que se recibe con el producto
+     producto.setId(id);
+     Producto productoDB = productoService.save(producto);
 
-//      try {
+     try {
 
-//          if (productoDB != null) {
-//              String mensaje = "El producto se ha actualizado correctamente";
-//              responseAsMap.put("mensaje", mensaje);
-//              responseAsMap.put("producto", productoDB);
-//              responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.OK);
-//          } else {
-//              // No se ha actualizado el producto
-//              responseAsMap.put("mensaje", "No se ha podido crear el producto");
-//              responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//          }
+         if (productoDB != null) {
+             String mensaje = "El producto se ha actualizado correctamente";
+             responseAsMap.put("mensaje", mensaje);
+             responseAsMap.put("producto", productoDB);
+             responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.OK);
+         } else {
+             // No se ha actualizado el producto
+             responseAsMap.put("mensaje", "No se ha podido crear el producto");
+             responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+         }
 
-//      } catch (DataAccessException e) {
-//          String errorGrave = "Ha tenido lugar un error grave" + ", y la causa más probable puede ser "
-//                  + e.getMostSpecificCause();
-//          responseAsMap.put("errorGrave", errorGrave);
-//          responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
-//      }
+     } catch (DataAccessException e) {
+         String errorGrave = "Ha tenido lugar un error grave" + ", y la causa más probable puede ser "
+                 + e.getMostSpecificCause();
+         responseAsMap.put("errorGrave", errorGrave);
+         responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
+     }
 
-//      return responseEntity;
+     return responseEntity;
 
-//  }
+ }
 
 //  /**Método de borrado por el que le pasas un id y se elimina */
 
-//  @DeleteMapping("/{id}")
-//   @Transactional
+ @DeleteMapping("/{id}")
+  @Transactional
 
-//   public ResponseEntity<String> delete(@PathVariable(name = "id") Integer id) {
+  public ResponseEntity<String> delete(@PathVariable(name = "id") Integer id) {
 
 
               
-//       ResponseEntity<String> responseEntity = null;
+      ResponseEntity<String> responseEntity = null;
 
       
 
-//       try {
-//            //Recuperamos el producto:
-//            Producto producto = productoService.findById(id);
-//            if(producto != null) {
-//               productoService.delete(producto);
-//               responseEntity = new ResponseEntity<String>("Borrado exitosamente", HttpStatus.OK);
-//            } else {
-//               responseEntity = new ResponseEntity<String>("No existe el producto buscado", HttpStatus.NOT_FOUND);
+      try {
+           //Recuperamos el producto:
+           Producto producto = productoService.findById(id);
+           if(producto != null) {
+              productoService.delete(producto);
+              responseEntity = new ResponseEntity<String>("Borrado exitosamente", HttpStatus.OK);
+           } else {
+              responseEntity = new ResponseEntity<String>("No existe el producto buscado", HttpStatus.NOT_FOUND);
 
-//            }
+           }
 
-//       } catch (DataAccessException e) {
-//           e.getMostSpecificCause();
-//           responseEntity = new ResponseEntity<String>("Error fatal", HttpStatus.INTERNAL_SERVER_ERROR);
-//       }
+      } catch (DataAccessException e) {
+          e.getMostSpecificCause();
+          responseEntity = new ResponseEntity<String>("Error fatal", HttpStatus.INTERNAL_SERVER_ERROR);
+      }
 
-//       return responseEntity;
+      return responseEntity;
 
-//       }
+      }
 
 
 
