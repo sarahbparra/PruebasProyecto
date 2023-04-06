@@ -16,6 +16,8 @@ public interface ProveedorService  {
     //public Page<Proveedor> findAll(Pageable pageable);
    
     public List<Proveedor> findAll();
+    // public List<Proveedor> findAll(Sort sort);
+    // public Page<Proveedor> findAll(Pageable pageable);
     public Proveedor findById (long id); 
 
     public Proveedor save (Proveedor proveedor);

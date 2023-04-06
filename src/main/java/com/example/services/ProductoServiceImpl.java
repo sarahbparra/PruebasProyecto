@@ -1,51 +1,51 @@
-package com.example.services;
+// package com.example.services;
 
-import java.util.List;
+// import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.data.domain.Page;
+// import org.springframework.data.domain.Pageable;
+// import org.springframework.data.domain.Sort;
+// import org.springframework.stereotype.Service;
 
-import com.example.dao.ProductoDao;
-import com.example.entities.Producto;
+// import com.example.dao.ProductoDao;
+// import com.example.entities.Producto;
 
-@Service
+// @Service
 
-public class ProductoServiceImpl implements ProductoService{
+// public class ProductoServiceImpl implements ProductoService{
     
-    @Autowired
-    private ProductoDao productoDao; 
+//     @Autowired
+//     private ProductoDao productoDao; 
 
-    @Override
-    public List<Producto> findAll(Sort sort) {
+//     @Override
+//     public List<Producto> findAll(Sort sort) {
         
-        return productoDao.findAll(sort); 
-    }
+//         return productoDao.findAll(sort); 
+//     }
 
-    @Override
-    public Page<Producto> findAll(Pageable pageable) {
+//     @Override
+//     public Page<Producto> findAll(Pageable pageable) {
        
-        return productoDao.findAll(pageable); 
-    }
+//         return productoDao.findAll(pageable); 
+//     }
 
 
-    @Override
-    public Producto save(Producto producto) {
+//     @Override
+//     public Producto save(Producto producto) {
         
-        return productoDao.save(producto); 
-    }
+//         return productoDao.save(producto); 
+//     }
 
-    @Override
-    public void delete(Producto producto) {
+//     @Override
+//     public void delete(Producto producto) {
        
-        productoDao.delete(producto);
-    }
+//         productoDao.delete(producto);
+//     }
 
-    @Override
-    public Producto findById(long id) {
+//     @Override
+//     public Producto findById(long id) {
         
-        return productoDao.findById(id);
-    }
-}
+//         return productoDao.findById(id);
+//     }
+// }

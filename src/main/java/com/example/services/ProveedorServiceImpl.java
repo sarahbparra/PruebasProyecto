@@ -28,6 +28,15 @@ public class ProveedorServiceImpl implements ProveedorService {
         return proveedorDao.findAll();
     }
 
+    // @Override
+    // public List<Proveedor> findAll(Sort sort) {
+    //    return proveedorDao.findAll(sort);
+    // }
+    // @Override
+    // public Page<Proveedor> findAll(Pageable pageable) {
+    //     return proveedorDao.findAll(pageable);
+    // }
+    
     @Override
     public Proveedor findById(long id) {
         return proveedorDao.findById(id).get();
