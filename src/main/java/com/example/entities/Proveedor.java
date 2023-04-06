@@ -19,7 +19,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "proveedores")
+@Table(name = "proveedores") //expresamente quiero que la tabla tenga este nombre porque de lo contrario en mysql sale 
+//el nombre de la clase en singular
 
 @Data
 @AllArgsConstructor
@@ -41,7 +42,7 @@ public class Proveedor implements Serializable{
     private String telefono; 
     private String correo; 
     
-    @NotNull
+    //@NotNull
     private String imagenProveedor;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) 
