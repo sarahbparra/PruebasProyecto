@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "proveedores") //expresamente quiero que la tabla tenga este nombre porque de lo contrario en mysql sale 
-//el nombre de la clase en singular
+//el nombre de la tabla con el mismo nombre de la clase en singular
 
 @Data
 @AllArgsConstructor
@@ -42,7 +42,7 @@ public class Proveedor implements Serializable{
     private String telefono; 
     private String correo; 
     
-    //@NotNull
+//@NotNull lo quito para que cuando este rellenando la tabla en mysql no me exiga nada, puedo dejar su campo como null
     private String imagenProveedor;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) 

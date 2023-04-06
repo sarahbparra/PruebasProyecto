@@ -41,7 +41,7 @@ import com.example.utilities.FileUploadUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@RestController // Para que todas las peticiones que devuelva sea JSON //En API Rest lo que se
+@RestController // Para que todas las peticiones que devuelva sea JSON, En API Rest lo que se
                 // solicita o lo que se gestiona son recursos y en dependencia del verbo http
                 // que se use, será una petición u otra
 
@@ -53,11 +53,12 @@ public class ProveedorController {
     @Autowired
     private ProveedorService proveedorService;
 
-    @Autowired // insertamos dependencia con el @Autowired
+ //insertamos dependencia con el @Autowired Esto es necesario para poder utilizar los métodos proporcionados por el DAO.
+
+    @Autowired 
     private FileUploadUtil fileUploadUtil;
 
-    // Tambien podemos inyectar una dependencia usando un constructor, PARA ELLO
-    // INSERTAMOS EL @RequiredArgsConstructor
+// Tambien podemos inyectar una dependencia usando un constructor, PARA ELLO INSERTAMOS EL @RequiredArgsConstructor
     private final FileDownloadUtil fileDownloadUtil;
 
 
@@ -210,8 +211,7 @@ public class ProveedorController {
             return responseEntity;
 
         }
-        // Si no hay errores persistimos el proveedor,PARA ELLO comprobamos previamente
-        // si nos han enviado una imagen o archivo
+// Si no hay errores persistimos el proveedor,PARA ELLO comprobamos previamente si nos han enviado una imagen o archivo
 
         if (!file.isEmpty()) {
             String fileCode = fileUploadUtil.saveFile(file.getOriginalFilename(), file);
@@ -282,8 +282,8 @@ public class ProveedorController {
             return responseEntity;
 
         }
-        // SI NO HAY ERRORES, ENTONCES PERSISTIMOS EL proveedor Vinculando previamente
-        // el id que se recibe con el proveedor
+
+// SI NO HAY ERRORES, ENTONCES PERSISTIMOS EL proveedor Vinculando previamente el id que se recibe con el proveedor
 
         proveedor.setId(id);
         Proveedor proveedorDB = proveedorService.save(proveedor);
