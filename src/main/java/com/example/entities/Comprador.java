@@ -33,6 +33,17 @@ public class Comprador implements Serializable{
     private long id; 
 
     private String nombre; 
+    private String apellidos;
+    private String correo; 
+    private String telefono; 
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaNacimiento; 
+
+    private Genero genero; 
+    public enum Genero {
+        HOMBRE, MUJER, OTRO
+    }
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Administrador administrador; 
