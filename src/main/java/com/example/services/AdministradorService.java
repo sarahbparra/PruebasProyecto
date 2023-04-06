@@ -1,6 +1,7 @@
 package com.example.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.entities.Administrador;
 
@@ -24,6 +25,11 @@ public interface AdministradorService {
      * Elimina un administrador de la base de datos:*/
     public void delete(Administrador administrador);
 
+
+    //Opcional para que funcione delete cuando un id no existe:
+    public Optional<Administrador> findOptById(Long id) ;
+    
+    
     /**
      * No es necesario un metodo update, porque el save inserta o actualiza, en
      * dependencia de que el id exista o no, es decir, si no existe lo

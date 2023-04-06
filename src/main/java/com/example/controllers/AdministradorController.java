@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -43,6 +44,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaType;
 
 import com.example.entities.Administrador;
 import com.example.services.AdministradorService;
@@ -92,10 +97,10 @@ public class AdministradorController {
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> findById(@PathVariable(name = "id") Long id) {
         Map<String, Object> responseAsMap = new HashMap<>();
-        ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+        ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity<>(new HttpHeaders(), HttpStatus.OK);
 
         try {
-            Administrador administrador = administradorService.findById(id);
+            Administrador administrador = administradorService.findById(id); //sin el opcional no reconoce los mensajes cuando no esta
 
             if (administrador != null) {
                 String successMessage = "Se ha encontrado el administrador con id: " + id;
@@ -105,6 +110,7 @@ public class AdministradorController {
             } else {
                 String errorMessage = "No se ha podido encontrar el administrador con id: " + id;
                 responseAsMap.put("errores", errorMessage);
+                System.out.println("Error: " + errorMessage);
 
                 responseEntity = new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -112,6 +118,7 @@ public class AdministradorController {
             String errorGrave = "Error grave";
             responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             responseAsMap.put("error", errorGrave);
+            System.out.println("Error grave: " + e.getMessage()); // añadido como comprobante
         }
 
         return responseEntity;
@@ -226,7 +233,7 @@ public class AdministradorController {
     }
 
     // Eliminar un administrador por su id
-    // FUNCIONA, no da mensaje de no borrado si no existe
+    // FUNCIONA
     @DeleteMapping("/delete/{id}")
     @Transactional
     public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
@@ -236,16 +243,19 @@ public class AdministradorController {
         try {
 
             // Primero lo recuperamos
-            Administrador administrador = administradorService.findById(id);
+
+            Administrador administrador = administradorService.findOptById(id).orElse(null);
+       
+
             // Si existe, lo borramos
             if (administrador != null) {
                 administradorService.delete(administrador);
 
-                responseEntity = new ResponseEntity<String>("El administrador se ha borrado correctamente",
+                responseEntity = new ResponseEntity<String>("El administrador " + id + "  se ha borrado correctamente",
                         HttpStatus.OK);
             } else {
                 // De lo contrario, informamos de que no existe
-                responseEntity = new ResponseEntity<String>("Este administrador no existe", HttpStatus.NOT_FOUND);
+                responseEntity = new ResponseEntity<String>("Este administrador con el id " + id + " no existe", HttpStatus.NOT_FOUND);
 
             }
 

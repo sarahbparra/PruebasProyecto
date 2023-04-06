@@ -1,6 +1,7 @@
 package com.example.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,12 @@ public class AdministradorServiceImpl implements AdministradorService {
     public void delete(Administrador Administrador) {
         administradorDao.delete(Administrador);
     }
-
+    
+        
+    @Override
+    public Optional<Administrador> findOptById(Long id) {
+        return administradorDao.findById(id);
+    }
+    
     
 }
