@@ -37,6 +37,10 @@ public class Proveedor implements Serializable {
 
     private String nombre; 
 
+    private String apellidos;
+    private String telefono;
+    private String correo;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) 
     private Administrador administrador; 
 

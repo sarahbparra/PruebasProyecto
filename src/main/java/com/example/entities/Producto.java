@@ -31,7 +31,12 @@ public class Producto implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private long id; 
 
-    private String descripcion; 
+    private String nombre; 
+    private String descripcion;
+    private String procedencia;
+    private String precio;
+    private double peso;
+    private double volumen;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonBackReference
