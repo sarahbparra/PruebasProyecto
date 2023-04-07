@@ -3,6 +3,8 @@ package com.example.entities;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,7 +21,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "proveedores")
 
 @Data
 @AllArgsConstructor
@@ -41,10 +42,10 @@ public class Proveedor implements Serializable{
     private String telefono; 
     private String correo; 
     
-    @NotNull
     private String imagenProveedor;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) 
+    @JsonBackReference
     private Administrador administrador; 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "proveedor") 
