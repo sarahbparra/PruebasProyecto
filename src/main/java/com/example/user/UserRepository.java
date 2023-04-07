@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
     // Añadimos estos métodos a los de JpaRepository:
     Optional<User> findByEmail(String email);
 
@@ -12,5 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 /**
  * En este caso no sería necesaria la capa Service porque con el Dao es
- * suficiente ya que solo queremos comprobar si un usuario existe o no
+ * suficiente ya que solo queremos comprobar si un usuario existe o no. Aun así,
+ * hemos decidido crearla para asegurarnos de que todas las partes funcionan
  */
