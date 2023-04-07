@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.example.entities.Administrador;
 import com.example.entities.Proveedor;
 
 public interface ProveedorDao extends JpaRepository<Proveedor, Long>{
@@ -20,6 +21,8 @@ public interface ProveedorDao extends JpaRepository<Proveedor, Long>{
     public Page<Proveedor> findAll(Pageable pageable); 
 
     @Query(value = "select p  from Proveedor p left join fetch p.administrador where p.id = :id") 
-    public Proveedor findById(long id); 
+    public Proveedor findById(long id);
+
+    public List<Proveedor> findByAdministrador(Administrador administrador); 
     
 }

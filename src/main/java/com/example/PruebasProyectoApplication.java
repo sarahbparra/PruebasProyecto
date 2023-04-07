@@ -4,9 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.example.entities.Administrador;
+import com.example.entities.Comprador;
 import com.example.entities.Proveedor;
 import com.example.services.AdministradorService;
+import com.example.services.CompradorService;
 import com.example.services.ProveedorService;
+
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,6 +25,9 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProveedorService proveedorService;
+
+	@Autowired
+	private CompradorService compradorService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PruebasProyectoApplication.class, args);
@@ -49,10 +56,22 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.telefono("telAdmin2")
 				.build());
 
+				//Si los creo desde aquí, luego me da problemas. Es mejor crearlos desde Postman o MySQL
 		// proveedorService.save(Proveedor.builder()
 		// .id(1)
-		// 		.nombre("prove1")
-		// 		.administrador(administradorService.findById(1))
-		// 		.build());
+		// .nombre("prove1")
+		// .administrador(administradorService.findById(1))
+		// .build());
+
+		// compradorService.save(Comprador
+		// 		.builder()
+		// 		.id(1)
+		// 		.nombre("Compra1")
+		// 		.apellidos("apellidos1")
+		// 		.correo("@mail1")
+		// 		.telefono("telefono1")
+		// 		.fechaNacimiento(LocalDate.of(1995, 12, 12))
+		// 		);
+
 	}
 }

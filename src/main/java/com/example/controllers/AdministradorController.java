@@ -50,7 +50,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.MediaType;
 
 import com.example.entities.Administrador;
+import com.example.entities.Comprador;
+import com.example.entities.Proveedor;
 import com.example.services.AdministradorService;
+import com.example.services.CompradorService;
+import com.example.services.CompradorServiceImpl;
+import com.example.services.ProveedorService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +70,12 @@ public class AdministradorController {
     @Autowired
     private AdministradorService administradorService;
 
+    @Autowired
+    private CompradorService compradorService;
+
+    @Autowired
+    private ProveedorService proveedorService;
+
     /**
      * Método para obtener todos los administradores como una lista. En este caso,
      * al ser podos
@@ -72,10 +83,24 @@ public class AdministradorController {
      * paginado o tamaño
      */
     // FUNCIONA
+    // EJEMPLO DE SEGURIDAD:
+    // @Secured("ADMIN") //solo los usuarios admin pueden utilizar este método
+
     @GetMapping
     public ResponseEntity<List<Administrador>> findAll() {
         ResponseEntity<List<Administrador>> responseEntity = null;
+
         List<Administrador> administradores = administradorService.findAll();
+
+        for (Administrador administrador : administradores) {
+            List<Comprador> compradores = compradorService.findByAdministrador(administrador);
+            administrador.setCompradores(compradores);
+        }
+
+        for (Administrador administrador : administradores) {
+            List<Proveedor> proveedoes = proveedorService.findByAdministrador(administrador);
+            administrador.setProveedores(proveedoes);
+        }
 
         if (administradores.isEmpty()) {
             try {
@@ -100,7 +125,9 @@ public class AdministradorController {
         ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity<>(new HttpHeaders(), HttpStatus.OK);
 
         try {
-            Administrador administrador = administradorService.findById(id); //sin el opcional no reconoce los mensajes cuando no esta
+            Administrador administrador = administradorService.findById(id);
+            // sin el opcional no reconoce los mensajes cuando no esta, pero si le pongo
+            // obcional me dice que existe como null
 
             if (administrador != null) {
                 String successMessage = "Se ha encontrado el administrador con id: " + id;
@@ -234,6 +261,7 @@ public class AdministradorController {
 
     // Eliminar un administrador por su id
     // FUNCIONA
+   
     @DeleteMapping("/delete/{id}")
     @Transactional
     public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
@@ -245,17 +273,30 @@ public class AdministradorController {
             // Primero lo recuperamos
 
             Administrador administrador = administradorService.findOptById(id).orElse(null);
-       
 
             // Si existe, lo borramos
             if (administrador != null) {
+                // Para poder borrar un administrador que tiene compradores asociados a él sin
+                // borrar en cascada:
+                // Desasociar compradores del administrador
+                List<Comprador> compradores = administrador.getCompradores();
+                for (Comprador comprador : compradores) {
+                    comprador.setAdministrador(null);
+                }
+                // Igual para proveedores:
+                List<Proveedor> proveedores = administrador.getProveedores();
+                for (Proveedor proveedor : proveedores) {
+                    proveedor.setAdministrador(null);
+                }
+
                 administradorService.delete(administrador);
 
                 responseEntity = new ResponseEntity<String>("El administrador " + id + "  se ha borrado correctamente",
                         HttpStatus.OK);
             } else {
                 // De lo contrario, informamos de que no existe
-                responseEntity = new ResponseEntity<String>("Este administrador con el id " + id + " no existe", HttpStatus.NOT_FOUND);
+                responseEntity = new ResponseEntity<String>("Este administrador con el id " + id + " no existe",
+                        HttpStatus.NOT_FOUND);
 
             }
 
