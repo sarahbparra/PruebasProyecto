@@ -5,6 +5,8 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -40,12 +42,15 @@ public class Comprador implements Serializable{
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento; 
 
+    private String imagenComprador; 
+
     private Genero genero; 
     public enum Genero {
         HOMBRE, MUJER, OTRO
     }
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JsonBackReference
     private Administrador administrador; 
     
 }
