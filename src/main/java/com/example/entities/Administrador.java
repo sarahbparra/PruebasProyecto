@@ -38,7 +38,8 @@ public class Administrador implements Serializable{
     private List<Comprador> compradores; 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "administrador")
-    @JsonManagedReference
+//en la clase padre del Proveedor que es Administrador hacemos referencia al hijo (proveedor) con el ManagedReference
+    @JsonManagedReference 
     private List<Proveedor> proveedores; 
 
 }

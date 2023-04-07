@@ -1,4 +1,5 @@
 package com.example.controllers;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,13 +45,13 @@ import lombok.RequiredArgsConstructor;
     public class ProveedorController {
     
 
-    @Autowired
+    @Autowired //insertamos dependencia con el @Autowired
     private ProveedorService proveedorService;
 
     @Autowired
     private ProductoService productoService; 
 
-    @Autowired //insertamos dependencia con el @Autowired
+    @Autowired 
     private FileUploadUtil fileUploadUtil;
 
     //Tambien podemos inyectar una dependencia usando un constructor, PARA ELLO INSERTAMOS EL @RequiredArgsConstructor
@@ -58,7 +59,7 @@ import lombok.RequiredArgsConstructor;
 
     
     /**
-     * Método para obtener todos los Proveedores como una lista.
+     * Método para obtener todos los Proveedores como una lista.(Irene)
      * En este caso, al ser Proveedores, hemos decidido que una lista es suficiente, sin necesidad de paginado o tamaño
      */
    
@@ -131,8 +132,8 @@ import lombok.RequiredArgsConstructor;
        @PostMapping( consumes = "multipart/form-data")
        @Transactional 
        
-       //El metodo sigiuente recibe un proveedor como parametro
-       public ResponseEntity<Map<String,Object>> insert(
+       
+       public ResponseEntity<Map<String,Object>> insert( //El metodo recibe un proveedor como parametro
         @Valid
         @RequestPart(name = "proveedor") Proveedor proveedor,
          BindingResult result,
@@ -154,7 +155,9 @@ import lombok.RequiredArgsConstructor;
         return responseEntity;
     
     }
-    //Si no hay errores persistimos el proveedor,PARA ELLO comprobamos previamente si nos han enviado una imagen o archivo 
+
+    
+ //Si no hay errores persistimos el proveedor,PARA ELLO comprobamos previamente si nos han enviado una imagen o archivo 
 
             if(!file.isEmpty()){
                 String fileCode = fileUploadUtil.saveFile(file.getOriginalFilename(), file);
@@ -175,8 +178,10 @@ import lombok.RequiredArgsConstructor;
              }
              Proveedor proveedorDB = proveedorService.save(proveedor);
 
-             List<Producto> productos = productoService.findAll(); 
+//Codigo que me ha añadido Sarah, y es para cuando haga un post en el postman se actualize el dato del proveedor con
+//su producto en mi base de datos 
 
+             List<Producto> productos = productoService.findAll(); 
              productos.stream().filter(p -> p.getProveedor() == null). 
              forEach(p -> p.setProveedor(proveedorDB));
 
@@ -187,13 +192,16 @@ import lombok.RequiredArgsConstructor;
                  String mensaje ="el proveedor se ha creado correctamente";
                  responseAsMap.put("mensaje", mensaje);
                  responseAsMap.put("proveedor", proveedorDB);
-                 //responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.CREATED);
-                
                  responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.OK);
              
                 } else{
                  //En caso que no se haya creado el PROVEEDOR
-             }
+            //  responseAsMap.put("mensaje", "No se ha podido crear el proveedor");
+            //  responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+         }
+
+             
              }catch(DataAccessException e){
                  String errorGrave = "Ha tenido lugar un error grave" + ", y la causa mas probable puede ser"+
                                        e.getMostSpecificCause();
@@ -201,7 +209,7 @@ import lombok.RequiredArgsConstructor;
                  responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
              }
  
-             //return responseEntity;
+            
          return responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.CREATED);
      }
 
@@ -211,7 +219,7 @@ import lombok.RequiredArgsConstructor;
        * El metodo siguiente actualiza el proveedor en la base de datos 
        */
         
-       @PutMapping("/{id}")  //le pasamos el id del proveedor y para actualizar usamos el @Put...
+       @PutMapping("/{id}")  //le pasamos el id del proveedor y para actualizar en el postMan usamos el @Put...
        @Transactional 
        
        
@@ -235,10 +243,12 @@ import lombok.RequiredArgsConstructor;
         return responseEntity;
     
     }
-//SI NO HAY ERRORES, ENTONCES PERSISTIMOS EL proveedor Vinculando previamente el id que se recibe con el proveedor
 
+
+//SI NO HAY ERRORES, ENTONCES PERSISTIMOS EL proveedor Vinculando previamente el id que se recibe con el proveedor
     proveedor.setId(id);
     Proveedor proveedorDB = proveedorService.save(proveedor);
+    
 
    try {
     if(proveedorDB != null){
@@ -249,8 +259,14 @@ import lombok.RequiredArgsConstructor;
     }
 
     else{
-        //En caso que no se haya creado el proveedor
-    }
+        
+    // // No se ha actualizado el proveedor
+    // responseAsMap.put("mensaje", "No se ha podido crear el proveedor");
+    // responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+   
+}
+
+    
    } catch (DataAccessException e) {
 
     String errorGrave = "Ha tenido lugar un error grave, y la causa mas probable puede ser" + e.getMostSpecificCause();

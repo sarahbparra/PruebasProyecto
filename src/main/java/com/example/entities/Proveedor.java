@@ -21,6 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+//No ponemos la anotacion @Table en ninguna clase entidad porq es un follon luego en la base de datos
 
 @Data
 @AllArgsConstructor
@@ -33,7 +34,7 @@ public class Proveedor implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private long id; 
+    private long id; //cambios de int a long por si a caso ya que en el dao lo tenemos como Long
 
     private String nombre; 
     private String primerApellido; 
@@ -45,9 +46,12 @@ public class Proveedor implements Serializable{
     private String imagenProveedor;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) 
-    @JsonBackReference
+//en la clase hijo Proveedor hacemos referencia al padre(Administrador) con el BackReference
+    @JsonBackReference 
     private Administrador administrador; 
 
+//ALL es porq cuando quiera borrar un proveedor, no me de problemas ya que no puedo borrar un padre y dejar 
+//"huerfanos" a los hijos que en este caso no puedo borrar un proveedor sin borrar antes sus productos
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proveedor") 
     private List<Producto> productos; 
 
