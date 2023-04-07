@@ -32,7 +32,7 @@ public class Producto implements Serializable{
 
     private String descripcion; 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     private Proveedor proveedor; 
 }

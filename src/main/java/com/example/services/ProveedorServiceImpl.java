@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dao.ProveedorDao;
 import com.example.entities.Proveedor;
@@ -30,15 +31,17 @@ public class ProveedorServiceImpl implements ProveedorService {
 
     @Override
     public Proveedor findById(long id) {
-        return proveedorDao.findById(id).get();
+        return proveedorDao.findById(id);
     }
 
     @Override
+    @Transactional
     public Proveedor save(Proveedor proveedor) {
         return proveedorDao.save(proveedor);
     }
 
     @Override
+    @Transactional
     public void delete(Proveedor proveedor) {
          proveedorDao.delete(proveedor);
     }

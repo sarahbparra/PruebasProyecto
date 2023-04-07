@@ -6,15 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -26,13 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.entities.Producto;
 import com.example.entities.Proveedor;
 import com.example.model.FileUploadResponse;
+import com.example.services.ProductoService;
 import com.example.services.ProveedorService;
 import com.example.utilities.FileDownloadUtil;
 import com.example.utilities.FileUploadUtil;
@@ -52,6 +46,9 @@ import lombok.RequiredArgsConstructor;
 
     @Autowired
     private ProveedorService proveedorService;
+
+    @Autowired
+    private ProductoService productoService; 
 
     @Autowired //insertamos dependencia con el @Autowired
     private FileUploadUtil fileUploadUtil;
@@ -107,7 +104,7 @@ import lombok.RequiredArgsConstructor;
                 responseAsMap.put("proveedor", proveedor);
                 responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.OK);
            
-            } else{
+            } else {
             String errorMessage = "No se ha encontrado el proveedor con id:" + id; 
             responseAsMap.put("error", errorMessage);
             responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.NOT_FOUND);
@@ -177,6 +174,13 @@ import lombok.RequiredArgsConstructor;
  
              }
              Proveedor proveedorDB = proveedorService.save(proveedor);
+
+             List<Producto> productos = productoService.findAll(); 
+
+             productos.stream().filter(p -> p.getProveedor() == null). 
+             forEach(p -> p.setProveedor(proveedorDB));
+
+
             
              try{
              if(proveedorDB != null){
@@ -281,14 +285,18 @@ import lombok.RequiredArgsConstructor;
                 proveedorService.delete(proveedor);
                 responseEntity = new ResponseEntity<String>("El proveedor se ha borrado correctamente", HttpStatus.OK);
                 
-            } else{
+            } else {
+
               responseEntity = new ResponseEntity<String>("No existe el proveedor", HttpStatus.NOT_FOUND);
          
             }
 
         } catch (DataAccessException e) {
-            e.getMostSpecificCause();
+           
+    
             responseEntity = new ResponseEntity<String>("Error fatal", HttpStatus.INTERNAL_SERVER_ERROR);
+
+            System.out.println(e.getMostSpecificCause());
          
             
         }

@@ -33,7 +33,7 @@ public class Proveedor implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private int id; 
+    private long id; 
 
     private String nombre; 
     private String primerApellido; 
@@ -48,7 +48,7 @@ public class Proveedor implements Serializable{
     @JsonBackReference
     private Administrador administrador; 
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "proveedor") 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "proveedor") 
     private List<Producto> productos; 
 
 }

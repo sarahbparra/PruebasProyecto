@@ -19,7 +19,7 @@ public interface ProveedorDao extends JpaRepository<Proveedor, Long>{
     // countQuery = "select count(p) from Proveedor p left join p.administrador")
     // public Page<Proveedor> findAll(Pageable pageable); 
 
-    // @Query(value = "select p  from Proveedor p left join fetch p.administrador where p.id = :id") 
-    // public Proveedor findById(long id); 
+    @Query(value = "select p  from Proveedor p left join fetch p.administrador where p.id = :id") 
+    public Proveedor findById(long id); 
     
 }
