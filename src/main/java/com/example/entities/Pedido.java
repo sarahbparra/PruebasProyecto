@@ -1,6 +1,7 @@
 package com.example.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,35 +30,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 
-public class Comprador implements Serializable{
+public class Pedido implements Serializable {
 
     private static final long serialVersionUID = 1L; 
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private long id; 
 
-    private String nombre; 
-    private String apellidos;
-    private String correo;
-    private String telefono;
-
+    private String codigoPedido; 
+    
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaNacimiento; 
+    private LocalDate fechaPedido; 
 
-    private String imagenComprador; 
+    private BigDecimal costeFinal;
 
-    private Genero genero; 
-    public enum Genero {
-        HOMBRE, MUJER, OTRO
-    }
+    // public void calcularCosteFinal() {
+    //     BigDecimal total = BigDecimal.ZERO;
+    //     for (Producto producto : productos) {
+    //         total = total.add(producto.getPrecio()); 
+    //     }
+    //     this.costeFinal = total;
+    // }
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "pedido") 
+    @JsonManagedReference
+    private List<Producto> productos; 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonBackReference
-    private Administrador administrador; 
+    private Comprador comprador; 
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "comprador") 
-    @JsonManagedReference
-    private List<Pedido> pedidos; 
     
 }

@@ -1,6 +1,7 @@
 package com.example.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -33,11 +34,14 @@ public class Producto implements Serializable{
     private String nombre; 
     private String descripcion;
     private String procedencia;
-    private String precio;
+    private BigDecimal precio;
     private double peso;
     private double volumen;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonBackReference
     private Proveedor proveedor; 
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private Pedido pedido; 
 }
