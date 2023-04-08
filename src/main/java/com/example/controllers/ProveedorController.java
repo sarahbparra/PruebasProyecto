@@ -311,28 +311,28 @@ import lombok.RequiredArgsConstructor;
     /**
      *  Implementa filedownnload end point API 
      **/    
-    @GetMapping("/downloadFile/{fileCode}")
-    public ResponseEntity<?> downloadFile(@PathVariable(name = "fileCode") String fileCode) {
+    // @GetMapping("/downloadFile/{fileCode}")
+    // public ResponseEntity<?> downloadFile(@PathVariable(name = "fileCode") String fileCode) {
 
-        Resource resource = null;
+    //     Resource resource = null;
 
-        try {
-            resource = fileDownloadUtil.getFileAsResource(fileCode);
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    //     try {
+    //         resource = fileDownloadUtil.getFileAsResource(fileCode);
+    //     } catch (IOException e) {
+    //         return ResponseEntity.internalServerError().build();
+    //     }
 
-        if (resource == null) {
-            return new ResponseEntity<>("File not found ", HttpStatus.NOT_FOUND);
-        }
+    //     if (resource == null) {
+    //         return new ResponseEntity<>("File not found ", HttpStatus.NOT_FOUND);
+    //     }
 
-        String contentType = "application/octet-stream";
-        String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
+    //     String contentType = "application/octet-stream";
+    //     String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
 
-        return ResponseEntity.ok()
-        .contentType(MediaType.parseMediaType(contentType))
-        .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-        .body(resource);
+    //     return ResponseEntity.ok()
+    //     .contentType(MediaType.parseMediaType(contentType))
+    //     .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+    //     .body(resource);
 
-    }
+    // }
 }
