@@ -9,8 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class FileUploadResponse {
+    
     private String fileName; 
     private String downloadURI; 
     private long size;
+
 }
