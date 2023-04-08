@@ -37,7 +37,7 @@ public class Producto implements Serializable{
     private double peso;
     private double volumen;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     private Proveedor proveedor; 
 
