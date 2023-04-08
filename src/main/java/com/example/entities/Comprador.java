@@ -52,5 +52,5 @@ public class Comprador implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonBackReference
     private Administrador administrador; 
-    
+
 }
