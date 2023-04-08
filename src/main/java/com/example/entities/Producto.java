@@ -42,6 +42,6 @@ public class Producto implements Serializable{
     @JsonBackReference
     private Proveedor proveedor; 
 
-    @NotNull
+    //@NotNull
     private String imagenProducto;
 }
