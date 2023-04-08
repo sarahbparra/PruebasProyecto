@@ -34,8 +34,7 @@ public class Proveedor implements Serializable{
     private long id; 
 
     private String nombre; 
-    private String primerApellido; 
-    private String segundoApellido; 
+    private String apellidos; 
 
     private String telefono; 
     private String correo; 
