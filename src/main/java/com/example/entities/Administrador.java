@@ -55,6 +55,9 @@ public class Administrador implements Serializable {
     @JsonManagedReference
     private List<Proveedor> proveedores; 
 
+    //Para poder dar mensajes de vacío en controller:
+    // private List<String> mensajes;
+
     public Administrador orElse(Object object) {
         return null;
     }
