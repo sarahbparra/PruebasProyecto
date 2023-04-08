@@ -29,7 +29,7 @@ public class Producto implements Serializable{
    private static final long serialVersionUID = 1L; 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private long id; 
+    private int id; 
 
     private String nombre; 
     private String descripcion;
@@ -38,10 +38,10 @@ public class Producto implements Serializable{
     private double peso;
     private double volumen;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     private Proveedor proveedor; 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private Pedido pedido; 
+    //@NotNull
+    private String imagenProducto;
 }

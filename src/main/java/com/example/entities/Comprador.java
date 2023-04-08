@@ -39,8 +39,8 @@ public class Comprador implements Serializable{
 
     private String nombre; 
     private String apellidos;
-    private String correo;
-    private String telefono;
+    private String correo; 
+    private String telefono; 
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento; 

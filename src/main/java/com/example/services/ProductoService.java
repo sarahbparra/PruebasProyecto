@@ -10,6 +10,7 @@ import com.example.entities.Producto;
 
 public interface ProductoService {
     
+    public List<Producto> findAll(); 
     public List<Producto> findAll(Sort sort); 
     public Page<Producto> findAll(Pageable pageable); 
     public Producto findById(long id);

@@ -21,6 +21,6 @@ public interface ProductoDao extends JpaRepository<Producto, Long>{
     public Page<Producto> findAll(Pageable pageable);
 
     // @Query("select p from Producto p left join fetch p.proveedor where p.id = :id")
-    @Query(value = "select p.* from producto p left join proveedor r on p.proveedor_id = r.id and p.id = :id", nativeQuery = true)
+    // @Query(value = "select p.* from producto p left join proveedor r on p.proveedor_id = r.id and p.id = :id", nativeQuery = true)
     public Producto findById(long id); 
 }
