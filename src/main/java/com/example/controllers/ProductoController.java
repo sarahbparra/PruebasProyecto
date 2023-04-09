@@ -35,8 +35,8 @@ public class ProductoController {
     private ProductoService productoService; 
 
 
-    //EJEMPLO DE SEGURIDAD:
-    @Secured("ADMIN") //solo los usuarios admin pueden dar de alta un producto
+    // //EJEMPLO DE SEGURIDAD:
+    // @Secured("ADMIN") //solo los usuarios admin pueden dar de alta un producto
     
     @GetMapping
     public ResponseEntity<List<Producto>> findAll(@RequestParam(name = "page", required = false) Integer page,
