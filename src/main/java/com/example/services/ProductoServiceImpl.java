@@ -48,4 +48,10 @@ public class ProductoServiceImpl implements ProductoService{
         
         return productoDao.findById(id);
     }
+
+    @Override
+    public List<Producto> findAll() {
+        
+        return productoDao.findAll(); 
+    }
 }
