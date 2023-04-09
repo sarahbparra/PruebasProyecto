@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -56,7 +57,7 @@ public class AdministradorController {
      */
     // FUNCIONA
     // EJEMPLO DE SEGURIDAD:
-    // @Secured("ADMIN") //solo los usuarios admin pueden utilizar este método
+    @Secured("ADMIN") //solo los usuarios admin pueden utilizar este método
 
     @GetMapping
     public ResponseEntity<List<Administrador>> findAll() {

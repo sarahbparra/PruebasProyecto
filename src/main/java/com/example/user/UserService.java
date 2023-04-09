@@ -7,5 +7,6 @@ public interface UserService {
     List<User> findAll();
     void deleteByEmail(String email);
     User findByEmail(String email);
-    User update(User user);    
+    User update(User user);
+    User save(User build);    
 }

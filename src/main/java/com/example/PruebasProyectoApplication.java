@@ -11,6 +11,9 @@ import com.example.entities.Comprador.Genero;
 import com.example.services.AdministradorService;
 import com.example.services.CompradorService;
 import com.example.services.ProveedorService;
+import com.example.user.Role;
+import com.example.user.User;
+import com.example.user.UserService;
 
 import java.time.LocalDate;
 
@@ -35,6 +38,9 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProductoService productoService;
+
+	@Autowired
+	private UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PruebasProyectoApplication.class, args);
@@ -131,13 +137,13 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.apellidos("apellidos3")
 				.correo("3@mail.com")
 				.telefono("telComp3")
-				.fechaNacimiento(LocalDate.of(3003, 13, 13))
+				.fechaNacimiento(LocalDate.of(3003, 12, 12))
 				.imagenComprador(null)
 				.genero(Genero.MUJER)
 				.administrador(administradorService.findById(1))
 				.build());
 
-		// 2 PRODUCTOS
+		// 3 PRODUCTOS
 		productoService.save(Producto.builder()
 				.id(1)
 				.nombre("Producto1")
@@ -162,8 +168,8 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.imagenProducto("")
 				.build());
 
-				//Producto con proveedor inexistente:
-				productoService.save(Producto.builder()
+		// Producto con proveedor inexistente:
+		productoService.save(Producto.builder()
 				.id(2)
 				.nombre("Producto2")
 				.descripcion("su proveedor no existe, revisalo")
@@ -173,6 +179,25 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.volumen(2.0)
 				.proveedor(proveedorService.findById(4))
 				.imagenProducto("")
+				.build());
+
+		// USUARIOS PARA SECURITY
+		userService.save(User.builder()
+				.id(1)
+				.firstName("user1")
+				.lastName("user1")
+				.email("@1")
+				.password("1234")
+				.role(Role.ADMIN)
+				.build());
+
+		userService.save(User.builder()
+				.id(2)
+				.firstName("user2")
+				.lastName("user2")
+				.email("@2")
+				.password("1234")
+				.role(Role.ADMIN)
 				.build());
 	}
 }
