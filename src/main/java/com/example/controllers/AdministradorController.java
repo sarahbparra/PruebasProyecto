@@ -58,46 +58,68 @@ public class AdministradorController {
     // EJEMPLO DE SEGURIDAD:
     // @Secured("ADMIN") //solo los usuarios admin pueden utilizar este método
 
+    // @GetMapping
+    // public ResponseEntity<Map<Long, Object>> findAll() {
+    //     Map<Long, Object> administradoresMap = new HashMap<>();
+    //     List<Administrador> administradores = administradorService.findAll();
+    
+    //     for (Administrador administrador : administradores) {
+    //         List<Comprador> compradores = compradorService.findByAdministrador(administrador);
+    //         administrador.setCompradores(compradores);
+    
+    //         List<Proveedor> proveedores = proveedorService.findByAdministrador(administrador);
+    //         administrador.setProveedores(proveedores);
+    
+    //         if (proveedores.isEmpty()) {
+    //             administradoresMap.put(administrador.getId(), new Object[]{administrador, "Este administrador no tiene proveedores"});
+    //         } else {
+    //             administradoresMap.put(administrador.getId(), administrador);
+    //         }
+    //     }
+    
+    //     if (administradores.isEmpty()) {
+    //         try {
+    //             administradores = administradorService.findAll();
+    //             for (Administrador administrador : administradores) {
+    //                 administradoresMap.put(administrador.getId(), administrador);
+    //             }
+    //             return new ResponseEntity<>(administradoresMap, HttpStatus.OK);
+    //         } catch (Exception e) {
+    //             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    //         }
+    //     } else {
+    //         return ResponseEntity.ok(administradoresMap);
+    //     }
+    // }
+    
+    // metodo antiguo con un stream:
     @GetMapping
-    public ResponseEntity<Map<Long, Object>> findAll() {
-        
-        Map<Long, Object> administradoresMap = new HashMap<>();
-        List<Administrador> administradores = administradorService.findAll();
-       
-        ResponseEntity<Map<Long, Object>> responseEntity = null;
+    public ResponseEntity<List<Administrador>> findAll() {
+        ResponseEntity<List<Administrador>> responseEntity = null;
 
-        for (Administrador administrador : administradores) {
+        List<Administrador> administradores = administradorService.findAll();
+        administradores.stream().forEach(administrador -> {
+        
             List<Comprador> compradores = compradorService.findByAdministrador(administrador);
             administrador.setCompradores(compradores);
-    
-            List<Proveedor> proveedores = proveedorService.findByAdministrador(administrador);
-            administrador.setProveedores(proveedores);
-    
-            if (proveedores.isEmpty()) {
-                administradoresMap.put(administrador.getId(), new Object[]{administrador, "Este administrador no tiene proveedores"});
-            } else {
-                administradoresMap.put(administrador.getId(), administrador);
-            }
-            if (compradores.isEmpty()) {
-                administradoresMap.put(administrador.getId(), new Object[]{administrador, "Este administrador no tienecompradores"});
-            } else {
-                administradoresMap.put(administrador.getId(), administrador);
-            }
-        }
-    
+        
+      
+            List<Proveedor> proveedoes = proveedorService.findByAdministrador(administrador); 
+            administrador.setProveedores(proveedoes);
+            
+        });
+
         if (administradores.isEmpty()) {
             try {
                 administradores = administradorService.findAll();
-                for (Administrador administrador : administradores) {
-                    administradoresMap.put(administrador.getId(), administrador);
-                }
-                responseEntity = new ResponseEntity<>(administradoresMap, HttpStatus.OK);
+                responseEntity = new ResponseEntity<List<Administrador>>(administradores, HttpStatus.OK);
             } catch (Exception e) {
                 responseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         } else {
-            responseEntity = new ResponseEntity<>(administradoresMap, HttpStatus.OK);
+            responseEntity = ResponseEntity.ok(administradores);
         }
+
         return responseEntity;
     }
     

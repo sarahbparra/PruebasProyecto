@@ -131,7 +131,7 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.apellidos("apellidos3")
 				.correo("3@mail.com")
 				.telefono("telComp3")
-				.fechaNacimiento(LocalDate.of(3003, 13, 13))
+				.fechaNacimiento(LocalDate.of(3003, 12, 12))
 				.imagenComprador(null)
 				.genero(Genero.MUJER)
 				.administrador(administradorService.findById(1))
