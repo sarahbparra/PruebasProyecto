@@ -1,4 +1,5 @@
 package com.example.controllers;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,34 +38,34 @@ import com.example.utilities.FileUploadUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@RestController // Para que todas las peticiones que devuelva sea JSON //En API Rest lo que se
+                // solicita o lo que se gestiona son recursos y en dependencia del verbo http
+                // que se use, será una petición u otra
 
-@RestController //Para que todas las peticiones que devuelva sea JSON //En API Rest lo que se solicita o lo que se gestiona son recursos y en dependencia del verbo http que se use, será una petición u otra 
-
-@RequestMapping("/proveedores")  // en el post man ponemos la url http://localhost:8080/proveedores
+@RequestMapping("/proveedores") // en el post man ponemos la url http://localhost:8080/proveedores
 @RequiredArgsConstructor
 
-
-    public class ProveedorController {
-    
+public class ProveedorController {
 
     @Autowired
     private ProveedorService proveedorService;
 
     @Autowired
-    private ProductoService productoService; 
+    private ProductoService productoService;
 
-    @Autowired //insertamos dependencia con el @Autowired
+    @Autowired // insertamos dependencia con el @Autowired
     private FileUploadUtil fileUploadUtil;
 
-   //Tambien podemos inyectar una dependencia usando un constructor, PARA ELLO INSERTAMOS EL @RequiredArgsConstructor
+    // Tambien podemos inyectar una dependencia usando un constructor, PARA ELLO
+    // INSERTAMOS EL @RequiredArgsConstructor
     private final FileDownloadUtil fileDownloadUtil;
 
-    
     /**
      * Método para obtener todos los Proveedores como una lista.
-     * En este caso, al ser Proveedores, hemos decidido que una lista es suficiente, sin necesidad de paginado o tamaño
+     * En este caso, al ser Proveedores, hemos decidido que una lista es suficiente,
+     * sin necesidad de paginado o tamaño
      */
-   
+
     @GetMapping
     public ResponseEntity<List<Proveedor>> findAll() {
         ResponseEntity<List<Proveedor>> responseEntity = null;
@@ -83,256 +84,261 @@ import lombok.RequiredArgsConstructor;
 
         return responseEntity;
     }
-     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     
-     /**
-      * Metodo que me devuelve un proveedor dado su id
-      */
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-      @GetMapping("/{id}") //para mostrar es get y para guardar es post 
-      public ResponseEntity<Map<String, Object>> findById(@PathVariable(name = "id") Integer id){
+    /**
+     * Metodo que me devuelve un proveedor dado su id
+     */
+
+    @GetMapping("/{id}") // para mostrar es get y para guardar es post
+    public ResponseEntity<Map<String, Object>> findById(@PathVariable(name = "id") Integer id) {
 
         ResponseEntity<Map<String, Object>> responseEntity = null;
-        Map<String, Object> responseAsMap = new HashMap<>(); 
-
-
+        Map<String, Object> responseAsMap = new HashMap<>();
 
         try {
-            
-            Proveedor proveedor = proveedorService.findById(id);
 
-            if(proveedor != null){
-                String successMessage = "Se ha encontrado el proveedor con id:" + id; 
+            Proveedor proveedor = proveedorService.findById(id);
+            String successMessage = null;
+
+            if (proveedor != null) {
+
+                List<Producto> productos = productoService.findByProveedor(proveedor);
+                proveedor.setProductos(productos);
+
+                if (productos.isEmpty()) {
+                    successMessage = "Se ha encontrado el administrador con id " + id
+                            + ", pero éste aún no tiene productos a la venta";
+
+                } else {
+                    successMessage = "Se ha encontrado el administrador con id " + id
+                            + " y un listado de los productos que ofrece";
+
+                }
                 responseAsMap.put("mensaje", successMessage);
                 responseAsMap.put("proveedor", proveedor);
                 responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.OK);
-           
+
             } else {
-            String errorMessage = "No se ha encontrado el proveedor con id:" + id; 
-            responseAsMap.put("error", errorMessage);
-            responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.NOT_FOUND);
+                String errorMessage = "No se ha encontrado el proveedor con id " + id;
+                responseAsMap.put("error", errorMessage);
+                responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.NOT_FOUND);
 
             }
-           
 
         } catch (Exception e) {
-  
-            String errorGrave = "Error grave"; 
+
+            String errorGrave = "Error grave";
             responseAsMap.put("error", errorGrave);
             responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
-            
+
         }
         return responseEntity;
-      }
+    }
 
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-      /**
-       * El metodo siguiente persiste o guarda un proveedor en la base de datos 
-       */
-        
-       @PostMapping( consumes = "multipart/form-data")
-       @Transactional 
-       
-       //El metodo sigiuente recibe un proveedor como parametro
-       public ResponseEntity<Map<String,Object>> insert(
-        @Valid
-        @RequestPart(name = "proveedor") Proveedor proveedor,
-         BindingResult result,
-         @RequestPart(name = "file") MultipartFile file) throws IOException{
-       
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * El metodo siguiente persiste o guarda un proveedor en la base de datos
+     */
+
+    @PostMapping(consumes = "multipart/form-data")
+    @Transactional
+
+    // El metodo sigiuente recibe un proveedor como parametro
+    public ResponseEntity<Map<String, Object>> insert(
+            @Valid @RequestPart(name = "proveedor") Proveedor proveedor,
+            BindingResult result,
+            @RequestPart(name = "file") MultipartFile file) throws IOException {
+
         Map<String, Object> responseAsMap = new HashMap<>();
         ResponseEntity<Map<String, Object>> responseEntity = null;
 
-        
-        if(result.hasErrors()) {
-            List<String> errorMessages = new ArrayList<>(); 
+        if (result.hasErrors()) {
+            List<String> errorMessages = new ArrayList<>();
 
-            for(ObjectError error : result.getAllErrors()) {  
-                 errorMessages.add(error.getDefaultMessage()); //siendo el mensaje por defecto los mensajes que hemos creado en la clase Proveedor
+            for (ObjectError error : result.getAllErrors()) {
+                errorMessages.add(error.getDefaultMessage()); // siendo el mensaje por defecto los mensajes que hemos
+                                                              // creado en la clase Proveedor
+            }
+
+            responseAsMap.put("errores", errorMessages);
+            responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.BAD_REQUEST);
+            return responseEntity;
+
         }
-    
-        responseAsMap.put("errores", errorMessages);
-        responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.BAD_REQUEST);
-        return responseEntity;
-    
+        // Si no hay errores persistimos el proveedor,PARA ELLO comprobamos previamente
+        // si nos han enviado un archivo
+
+        if (!file.isEmpty()) {
+            String fileCode = fileUploadUtil.saveFile(file.getOriginalFilename(), file);
+            proveedor.setDocumentacionProveedor(fileCode + "-" + file.getOriginalFilename());
+
+            FileUploadResponse fileUploadResponse = FileUploadResponse
+                    .builder()
+                    .fileName(fileCode + "-" + file.getOriginalFilename())
+                    .downloadURI("/proveedores/downloadFile/"
+                            + fileCode + "-" + file.getOriginalFilename())
+                    .size(file.getSize())
+                    .build();
+
+            responseAsMap.put("info del documento: ", fileUploadResponse);
+
+        }
+        Proveedor proveedorDB = proveedorService.save(proveedor);
+
+        List<Producto> productos = productoService.findAll();
+
+        productos.stream().filter(p -> p.getProveedor() == null).forEach(p -> p.setProveedor(proveedorDB));
+
+        try {
+            if (proveedorDB != null) {
+                String mensaje = "El proveedor se ha creado correctamente";
+                responseAsMap.put("mensaje", mensaje);
+                responseAsMap.put("proveedor", proveedorDB);
+                // responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap,
+                // HttpStatus.CREATED);
+
+                responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.OK);
+
+            } else {
+                // En caso que no se haya creado el PROVEEDOR
+            }
+        } catch (DataAccessException e) {
+            String errorGrave = "Ha tenido lugar un error grave, y la causa mas probable puede ser: " +
+                    e.getMostSpecificCause();
+            responseAsMap.put("error grave", errorGrave);
+            responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        // return responseEntity;
+        return responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.CREATED);
     }
-    //Si no hay errores persistimos el proveedor,PARA ELLO comprobamos previamente si nos han enviado un archivo 
 
-            if(!file.isEmpty()){
-                String fileCode = fileUploadUtil.saveFile(file.getOriginalFilename(), file);
-                proveedor.setDocumentacionProveedor(fileCode+"-"+file.getOriginalFilename()); 
-                
-                
- 
-                FileUploadResponse fileUploadResponse = FileUploadResponse
-                             .builder()
-                             .fileName(fileCode + "-" + file.getOriginalFilename())
-                             .downloadURI("/proveedores/downloadFile/"
-                                 +fileCode + "-" + file.getOriginalFilename())
-                             .size(file.getSize())
-                             .build();
- 
-                 responseAsMap.put("info del documento: ", fileUploadResponse);     
- 
-             }
-             Proveedor proveedorDB = proveedorService.save(proveedor);
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-             List<Producto> productos = productoService.findAll(); 
+    /**
+     * El metodo siguiente actualiza el proveedor en la base de datos
+     */
 
-             productos.stream().filter(p -> p.getProveedor() == null). 
-             forEach(p -> p.setProveedor(proveedorDB));
+    @PutMapping("/{id}") // le pasamos el id del proveedor y para actualizar usamos el @Put...
+    @Transactional
 
+    public ResponseEntity<Map<String, Object>> update(@Valid @RequestBody Proveedor proveedor,
+            BindingResult result,
+            @PathVariable(name = "id") Integer id) {
 
-            
-             try{
-             if(proveedorDB != null){
-                 String mensaje ="el proveedor se ha creado correctamente";
-                 responseAsMap.put("mensaje", mensaje);
-                 responseAsMap.put("proveedor", proveedorDB);
-                 //responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.CREATED);
-                
-                 responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.OK);
-             
-                } else{
-                 //En caso que no se haya creado el PROVEEDOR
-             }
-             }catch(DataAccessException e){
-                 String errorGrave = "Ha tenido lugar un error grave" + ", y la causa mas probable puede ser"+
-                                       e.getMostSpecificCause();
-                 responseAsMap.put("error grave", errorGrave);
-                 responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
-             }
- 
-             //return responseEntity;
-         return responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.CREATED);
-     }
-
-     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-       /**
-       * El metodo siguiente actualiza el proveedor en la base de datos 
-       */
-        
-       @PutMapping("/{id}")  //le pasamos el id del proveedor y para actualizar usamos el @Put...
-       @Transactional 
-       
-       
-       public ResponseEntity<Map<String, Object>> update(@Valid @RequestBody Proveedor proveedor, 
-                                                                BindingResult result,
-                                                                @PathVariable(name = "id") Integer id) { 
- 
         Map<String, Object> responseAsMap = new HashMap<>();
         ResponseEntity<Map<String, Object>> responseEntity = null;
 
-        
-        if(result.hasErrors()) {
-            List<String> errorMessages = new ArrayList<>(); 
+        if (result.hasErrors()) {
+            List<String> errorMessages = new ArrayList<>();
 
-            for(ObjectError error : result.getAllErrors()) {  
-                 errorMessages.add(error.getDefaultMessage()); 
+            for (ObjectError error : result.getAllErrors()) {
+                errorMessages.add(error.getDefaultMessage());
+            }
+
+            responseAsMap.put("errores", errorMessages);
+            responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.BAD_REQUEST);
+            return responseEntity;
+
         }
-    
-        responseAsMap.put("errores", errorMessages);
-        responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.BAD_REQUEST);
+        // SI NO HAY ERRORES, ENTONCES PERSISTIMOS EL proveedor Vinculando previamente
+        // el id que se recibe con el proveedor
+
+        proveedor.setId(id);
+        Proveedor proveedorDB = proveedorService.save(proveedor);
+
+        try {
+            if (proveedorDB != null) {
+                String mensaje = "El proveedor con id " + id + " se ha actualizado correctamente";
+                responseAsMap.put("mensaje", mensaje);
+                responseAsMap.put("proveedor", proveedorDB);
+                responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.OK);
+            }
+
+            else {
+                // En caso que no se haya creado el proveedor
+            }
+        } catch (DataAccessException e) {
+
+            String errorGrave = "Ha tenido lugar un error grave, y la causa mas probable puede ser:"
+                    + e.getMostSpecificCause();
+            responseAsMap.put("errorGrave", errorGrave);
+            responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         return responseEntity;
-    
+
     }
-//SI NO HAY ERRORES, ENTONCES PERSISTIMOS EL proveedor Vinculando previamente el id que se recibe con el proveedor
-
-    proveedor.setId(id);
-    Proveedor proveedorDB = proveedorService.save(proveedor);
-
-   try {
-    if(proveedorDB != null){
-        String mensaje = "El proveedor se ha actualizado correctamente";
-        responseAsMap.put("mensaje", mensaje);
-        responseAsMap.put("proveedor", proveedorDB);
-        responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.OK);
-    }
-
-    else{
-        //En caso que no se haya creado el proveedor
-    }
-   } catch (DataAccessException e) {
-
-    String errorGrave = "Ha tenido lugar un error grave, y la causa mas probable puede ser" + e.getMostSpecificCause();
-    responseAsMap.put("errorGrave", errorGrave);
-    responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR);
-   }
-        return responseEntity;
-       
-    
-    }
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-       * El metodo siguiente elimina un proveedor de la base de datos 
-       */
-        
-       @DeleteMapping("/{id}")  //recibe el id del proveedor que queremos borrar
-       @Transactional 
-      
+     * El metodo siguiente elimina un proveedor de la base de datos
+     */
 
-       public ResponseEntity <String> delete(@PathVariable(name = "id") Integer id) { 
-                                                            
+    @DeleteMapping("/{id}") // recibe el id del proveedor que queremos borrar
+    @Transactional
+
+    public ResponseEntity<String> delete(@PathVariable(name = "id") Integer id) {
+
         ResponseEntity<String> responseEntity = null;
 
         try {
-            //Primero buscamos el proveedor antes de eliminarlo
+            // Primero buscamos el proveedor antes de eliminarlo
             Proveedor proveedor = proveedorService.findById(id);
-            
-            if(proveedor != null){ //si el proveedor  existe lo elimnamos entonces
+
+            if (proveedor != null) { // si el proveedor existe lo elimnamos entonces
                 proveedorService.delete(proveedor);
-                responseEntity = new ResponseEntity<String>("El proveedor se ha borrado correctamente", HttpStatus.OK);
-                
+                responseEntity = new ResponseEntity<String>(
+                        "El proveedor con id " + id + " se ha borrado correctamente", HttpStatus.OK);
+
             } else {
 
-              responseEntity = new ResponseEntity<String>("No existe el proveedor", HttpStatus.NOT_FOUND);
-         
+                responseEntity = new ResponseEntity<String>("El proveedor con id " + id + " no existe",
+                        HttpStatus.NOT_FOUND);
+
             }
 
         } catch (DataAccessException e) {
-           
-    
+
             responseEntity = new ResponseEntity<String>("Error fatal", HttpStatus.INTERNAL_SERVER_ERROR);
 
             System.out.println(e.getMostSpecificCause());
-         
-            
+
         }
-        
-        return responseEntity;  
-       
+
+        return responseEntity;
+
     }
 
     /**
-     *  Implementa filedownnload end point API 
-     **/    
+     * Implementa filedownnload end point API
+     **/
     // @GetMapping("/downloadFile/{fileCode}")
-    // public ResponseEntity<?> downloadFile(@PathVariable(name = "fileCode") String fileCode) {
+    // public ResponseEntity<?> downloadFile(@PathVariable(name = "fileCode") String
+    // fileCode) {
 
-    //     Resource resource = null;
+    // Resource resource = null;
 
-    //     try {
-    //         resource = fileDownloadUtil.getFileAsResource(fileCode);
-    //     } catch (IOException e) {
-    //         return ResponseEntity.internalServerError().build();
-    //     }
+    // try {
+    // resource = fileDownloadUtil.getFileAsResource(fileCode);
+    // } catch (IOException e) {
+    // return ResponseEntity.internalServerError().build();
+    // }
 
-    //     if (resource == null) {
-    //         return new ResponseEntity<>("File not found ", HttpStatus.NOT_FOUND);
-    //     }
+    // if (resource == null) {
+    // return new ResponseEntity<>("File not found ", HttpStatus.NOT_FOUND);
+    // }
 
-    //     String contentType = "application/octet-stream";
-    //     String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
+    // String contentType = "application/octet-stream";
+    // String headerValue = "attachment; filename=\"" + resource.getFilename() +
+    // "\"";
 
-    //     return ResponseEntity.ok()
-    //     .contentType(MediaType.parseMediaType(contentType))
-    //     .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-    //     .body(resource);
+    // return ResponseEntity.ok()
+    // .contentType(MediaType.parseMediaType(contentType))
+    // .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+    // .body(resource);
 
     // }
 }

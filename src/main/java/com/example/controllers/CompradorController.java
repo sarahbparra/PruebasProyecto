@@ -121,7 +121,7 @@ public class CompradorController {
 
             if(comprador != null){
 
-                String succesMessage = "Comprador con id " + id + " ha sido encontrado :)"; 
+                String succesMessage = "Comprador con id " + id + " ha sido encontrado"; 
                 responseAsMap.put("mensaje", succesMessage); 
                 responseAsMap.put("comprador", comprador); 
 
@@ -129,7 +129,7 @@ public class CompradorController {
 
             } else {
 
-                String errorMessage = "Comprador con id " + id + " no ha sido encontrado :("; 
+                String errorMessage = "No se ha encontrado el comprador con id " + id; 
                 responseAsMap.put("error", errorMessage); 
                 responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.NOT_FOUND); 
 
@@ -223,7 +223,7 @@ public class CompradorController {
                 
              } catch (DataAccessException e) {
                 
-                String errorGrave = "Ha tenido lugar un error grave " + ", y la causa más probable puede ser" 
+                String errorGrave = "Ha tenido lugar un error grave, y la causa más probable puede ser: " 
             + e.getMostSpecificCause(); 
             responseAsMap.put("errorGrave", errorGrave); 
             responseEntity = new ResponseEntity<Map<String, Object>>(responseAsMap, HttpStatus.INTERNAL_SERVER_ERROR); 
@@ -248,17 +248,18 @@ public class CompradorController {
             if(comprador != null){
 
                 compradorService.delete(comprador);
-                responseEntity = new ResponseEntity<String>("Borrado correctamente", HttpStatus.OK); 
+                responseEntity = new ResponseEntity<String>("El comprador "+ id + "  se ha borrado correctamente", HttpStatus.OK); 
             } else {
 
-                responseEntity = new ResponseEntity<String>("No se puede realizar ya que no hay comprador", HttpStatus.NOT_FOUND); 
+                responseEntity = new ResponseEntity<String>(" El comprador con id " + id
+                + " no existe.", HttpStatus.NOT_FOUND); 
             }
+
         } catch (DataAccessException e) {
             
             e.getMostSpecificCause(); 
             responseEntity = new ResponseEntity<String>("Error fatal", HttpStatus.INTERNAL_SERVER_ERROR); 
         }
-
 
         return responseEntity; 
     }

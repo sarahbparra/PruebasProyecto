@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.dao.ProductoDao;
 import com.example.entities.Producto;
+import com.example.entities.Proveedor;
 
 @Service
 
@@ -54,4 +55,9 @@ public class ProductoServiceImpl implements ProductoService{
         
         return productoDao.findAll(); 
     }
+
+    @Override
+    public List<Producto> findByProveedor(Proveedor proveedor) {
+        return productoDao.findByProveedor(proveedor);
+        }
 }
