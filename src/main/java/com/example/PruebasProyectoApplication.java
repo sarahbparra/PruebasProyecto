@@ -104,7 +104,7 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.apellidos("apellidos2")
 				.correo("2@mail.com")
 				.telefono("telComp2")
-				.fechaNacimiento(LocalDate.of(2995, 22, 22))
+				.fechaNacimiento(LocalDate.of(2995, 12, 12))
 				.imagenComprador(null)
 				.genero(Genero.MUJER)
 				.administrador(administradorService.findById(2))

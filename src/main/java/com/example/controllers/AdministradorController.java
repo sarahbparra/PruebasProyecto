@@ -59,34 +59,79 @@ public class AdministradorController {
     // @Secured("ADMIN") //solo los usuarios admin pueden utilizar este método
 
     @GetMapping
-    public ResponseEntity<List<Administrador>> findAll() {
-        ResponseEntity<List<Administrador>> responseEntity = null;
-
+    public ResponseEntity<Map<Long, Object>> findAll() {
+        
+        Map<Long, Object> administradoresMap = new HashMap<>();
         List<Administrador> administradores = administradorService.findAll();
+       
+        ResponseEntity<Map<Long, Object>> responseEntity = null;
 
         for (Administrador administrador : administradores) {
             List<Comprador> compradores = compradorService.findByAdministrador(administrador);
             administrador.setCompradores(compradores);
+    
+            List<Proveedor> proveedores = proveedorService.findByAdministrador(administrador);
+            administrador.setProveedores(proveedores);
+    
+            if (proveedores.isEmpty()) {
+                administradoresMap.put(administrador.getId(), new Object[]{administrador, "Este administrador no tiene proveedores"});
+            } else {
+                administradoresMap.put(administrador.getId(), administrador);
+            }
+            if (compradores.isEmpty()) {
+                administradoresMap.put(administrador.getId(), new Object[]{administrador, "Este administrador no tienecompradores"});
+            } else {
+                administradoresMap.put(administrador.getId(), administrador);
+            }
         }
-
-        for (Administrador administrador : administradores) {
-            List<Proveedor> proveedoes = proveedorService.findByAdministrador(administrador); 
-            administrador.setProveedores(proveedoes);
-        }
-
+    
         if (administradores.isEmpty()) {
             try {
                 administradores = administradorService.findAll();
-                responseEntity = new ResponseEntity<List<Administrador>>(administradores, HttpStatus.OK);
+                for (Administrador administrador : administradores) {
+                    administradoresMap.put(administrador.getId(), administrador);
+                }
+                responseEntity = new ResponseEntity<>(administradoresMap, HttpStatus.OK);
             } catch (Exception e) {
                 responseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
         } else {
-            responseEntity = ResponseEntity.ok(administradores);
+            responseEntity = new ResponseEntity<>(administradoresMap, HttpStatus.OK);
         }
-
         return responseEntity;
     }
+    
+    //metodo antiguo:
+    // @GetMapping
+    // public ResponseEntity<List<Administrador>> findAll() {
+    //     ResponseEntity<List<Administrador>> responseEntity = null;
+
+    //     List<Administrador> administradores = administradorService.findAll();
+
+    //     for (Administrador administrador : administradores) {
+    //         List<Comprador> compradores = compradorService.findByAdministrador(administrador);
+    //         administrador.setCompradores(compradores);
+    //     }
+
+    //     for (Administrador administrador : administradores) {
+    //         List<Proveedor> proveedoes = proveedorService.findByAdministrador(administrador); 
+    //         administrador.setProveedores(proveedoes);
+            
+    //     }
+
+    //     if (administradores.isEmpty()) {
+    //         try {
+    //             administradores = administradorService.findAll();
+    //             responseEntity = new ResponseEntity<List<Administrador>>(administradores, HttpStatus.OK);
+    //         } catch (Exception e) {
+    //             responseEntity = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    //         }
+    //     } else {
+    //         responseEntity = ResponseEntity.ok(administradores);
+    //     }
+
+    //     return responseEntity;
+    // }
 
     // Obtener un administrador por su id:
     // FUNCIONA
@@ -110,7 +155,7 @@ public class AdministradorController {
                 responseAsMap.put("mensaje", successMessage);
                 responseAsMap.put("administrador", administrador);
                 responseEntity = new ResponseEntity<>(responseAsMap, HttpStatus.OK);
-            } 
+            }
         } catch (Exception e) {
             String errorGrave = "Error grave";
             responseEntity = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -120,7 +165,6 @@ public class AdministradorController {
 
         return responseEntity;
     }
-
 
     // Crear un nuevo administrador.
     // OJO: si en el cuerpo mantienes un id que ya existe, modificará los datos de
