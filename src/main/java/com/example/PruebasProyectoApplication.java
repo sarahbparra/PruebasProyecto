@@ -184,8 +184,7 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 		// USUARIOS PARA SECURITY
 		userService.save(User.builder()
 				.id(1)
-				.firstName("user1")
-				.lastName("user1")
+				.userName("user1")
 				.email("@1")
 				.password("1234")
 				.role(Role.ADMIN)
@@ -193,8 +192,7 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 
 		userService.save(User.builder()
 				.id(2)
-				.firstName("user2")
-				.lastName("user2")
+				.userName("user2")
 				.email("@2")
 				.password("1234")
 				.role(Role.ADMIN)
