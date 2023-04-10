@@ -56,7 +56,7 @@ public class MyUserDetails implements UserDetails {
         // para crear una nueva lista de autorizaciones de seguridad, que se almacena en
         // el campo authorities;
         authorities = Arrays
-                .stream(Role.values().toString().split(","))
+                .stream(user.getRole().toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }

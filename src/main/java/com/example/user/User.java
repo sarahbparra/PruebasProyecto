@@ -24,8 +24,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String firstName;
-    private String lastName;
+    private String userName;
+    
 
     @Column(unique = true) // No se repite, pero no forma parte de la PK
     // @NaturalId(mutable = true) Para que forme parte de la PK

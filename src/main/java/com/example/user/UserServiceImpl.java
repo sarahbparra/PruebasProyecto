@@ -89,9 +89,20 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User update(User user) {
-        user.setRole(user.getRole());
-        return userRepository.save(user);
-    }
+        User existingUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(
+                        () -> new UsernameNotFoundException("No existe el usuario con el email: " +
+                                user.getEmail()));
+
+        existingUser.setUserName(user.getUserName());
+       
+        // existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        existingUser.setRole(user.getRole());
+
+        User userUpdated = userRepository.save(existingUser);
+
+        return userUpdated;}
 
     @Override
     public User save(User user) {
