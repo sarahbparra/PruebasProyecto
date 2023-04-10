@@ -128,7 +128,7 @@ public class AdministradorController {
     // OJO: si en el cuerpo mantienes un id que ya existe, modificará los datos de
     // ese administrador
     // FUNCIONA
-    @PostMapping("/create")
+    @PostMapping
     @Transactional
     public ResponseEntity<Map<String, Object>> createAdministrador(
             @Valid @RequestBody Administrador administrador,
@@ -175,7 +175,7 @@ public class AdministradorController {
     // Actualizar un administrador existente. OJO: si pones un id que no exite, lo
     // creará con el siguiente id autogenerado
     // FUNCIONA
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<Map<String, Object>> updateAdministrador(
             @Valid @RequestBody Administrador administrador,

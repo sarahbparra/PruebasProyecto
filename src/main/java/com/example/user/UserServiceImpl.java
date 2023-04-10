@@ -80,7 +80,8 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email) {
         return userRepository
                 .findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No existe el usuario con el email: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException(
+                    "No existe el usuario con el email: " + email));
     }
 
     /**
@@ -104,10 +105,6 @@ public class UserServiceImpl implements UserService {
 
         return userUpdated;}
 
-    @Override
-    public User save(User user) {
-        return userRepository.save(user);
-    
-    }
+       
 
 }

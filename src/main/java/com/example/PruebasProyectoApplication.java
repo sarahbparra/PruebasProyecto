@@ -181,21 +181,6 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.imagenProducto("")
 				.build());
 
-		// USUARIOS PARA SECURITY
-		userService.save(User.builder()
-				.id(1)
-				.userName("user1")
-				.email("@1")
-				.password("1234")
-				.role(Role.ADMIN)
-				.build());
-
-		userService.save(User.builder()
-				.id(2)
-				.userName("user2")
-				.email("@2")
-				.password("1234")
-				.role(Role.ADMIN)
-				.build());
+		
 	}
 }

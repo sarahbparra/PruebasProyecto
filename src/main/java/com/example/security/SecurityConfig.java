@@ -46,15 +46,20 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /*
+     * OJO: Método de un solo uso. Lo utilizamos para codificar la primera
+     * contraseña que creemos y despues lo comentamos para que no interfiera
+     */
     // //Este main lo ponemos aquí y no en app para que no sea necesario levantar
     // absolutamente todo ell proyecto cada vez que generemos una constraseña
-    // public static void main(String[] args) {
-    // System.out.println(new SecurityConfig().passwordEncoder().encode("123456"));
-    // }
-    // CONTRASEÑA GENERADA POR ESTE MÉTODO:
-    // $2a$10$nARlnlVgqDZoY7taR0MCoe6eE4zL5v/CK.qprkP5IJ4Rj8yxTctVq
 
-    // Métodos creados:
+    public static void main(String[] args) {
+    System.out.println(new SecurityConfig().passwordEncoder().encode("1234"));
+    }
+    // CONTRASEÑA GENERADA POR ESTE MÉTODO:
+    // $2a$10$27uGO2o.ex0ktYhQyi4MTex/WiVFQUsIEU6HS1Byn6uX.H3/sQmzC
+
+    // Otros métodos creados:
 
     /**
      * Se define el método securityFilterChain que recibe como parámetro un objeto
@@ -92,6 +97,6 @@ public class SecurityConfig {
 
     }
 
-//OJO, COMPROBAR EN LOS CONTROLES QUÉ MÉTODOS TIENEN @SECURED
+    // OJO, COMPROBAR EN LOS CONTROLES QUÉ MÉTODOS TIENEN @SECURED
 
 }
