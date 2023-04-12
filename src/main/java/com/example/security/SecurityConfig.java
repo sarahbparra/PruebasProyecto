@@ -47,19 +47,17 @@ public class SecurityConfig {
     }
 
     /*
-     * OJO: Método de un solo uso. Lo utilizamos para codificar la primera
-     * contraseña que creemos y despues lo comentamos para que no interfiera
+     * Este código utiliza la clase SecurityConfig para generar un hash de la contraseña "1234".
+     * 
+     * El método passwordEncoder() devuelve una instancia de un PasswordEncoder
+     *  que se encarga de codificar las contraseñas.
      */
-    // //Este main lo ponemos aquí y no en app para que no sea necesario levantar
-    // absolutamente todo ell proyecto cada vez que generemos una constraseña
 
     public static void main(String[] args) {
     System.out.println(new SecurityConfig().passwordEncoder().encode("1234"));
     }
     // CONTRASEÑA GENERADA POR ESTE MÉTODO:
-    // $2a$10$z1gH0v8k6ve99mJ1zc3Gsea42SDst46vmmnoCkuwlqx.iO6vmtahy
-
-    // Otros métodos creados:
+    //$2a$10$5i7KpqAgooo9Ws5IW/GhjOuZ1RTRs39LqtjL8J014vogNLvpXO3BS
 
     /**
      * Se define el método securityFilterChain que recibe como parámetro un objeto
