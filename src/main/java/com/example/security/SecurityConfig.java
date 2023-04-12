@@ -57,7 +57,7 @@ public class SecurityConfig {
     System.out.println(new SecurityConfig().passwordEncoder().encode("1234"));
     }
     // CONTRASEÑA GENERADA POR ESTE MÉTODO:
-    // $2a$10$27uGO2o.ex0ktYhQyi4MTex/WiVFQUsIEU6HS1Byn6uX.H3/sQmzC
+    // $2a$10$z1gH0v8k6ve99mJ1zc3Gsea42SDst46vmmnoCkuwlqx.iO6vmtahy
 
     // Otros métodos creados:
 

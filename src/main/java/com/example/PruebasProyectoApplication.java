@@ -1,20 +1,5 @@
 package com.example;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.example.entities.Administrador;
-import com.example.entities.Comprador;
-import com.example.entities.Producto;
-import com.example.entities.Proveedor;
-import com.example.entities.Comprador.Genero;
-import com.example.services.AdministradorService;
-import com.example.services.CompradorService;
-import com.example.services.ProveedorService;
-import com.example.user.Role;
-import com.example.user.User;
-import com.example.user.UserService;
-
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +7,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.example.entities.Administrador;
+import com.example.entities.Comprador;
+import com.example.entities.Comprador.Genero;
+import com.example.entities.Producto;
+import com.example.entities.Proveedor;
+import com.example.services.AdministradorService;
+import com.example.services.CompradorService;
 import com.example.services.ProductoService;
+import com.example.services.ProveedorService;
+import com.example.user.UserService;
 
 @SpringBootApplication
 public class PruebasProyectoApplication implements CommandLineRunner {
@@ -39,8 +33,6 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 	@Autowired
 	private ProductoService productoService;
 
-	@Autowired
-	private UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PruebasProyectoApplication.class, args);
