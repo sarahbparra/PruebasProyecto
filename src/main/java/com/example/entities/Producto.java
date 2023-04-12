@@ -42,6 +42,10 @@ public class Producto implements Serializable{
     @JsonBackReference
     private Proveedor proveedor; 
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Pedido pedido; 
+
     //@NotNull
     private String imagenProducto;
 }

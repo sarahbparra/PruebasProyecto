@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -53,7 +56,7 @@ import lombok.RequiredArgsConstructor;
     @Autowired //insertamos dependencia con el @Autowired
     private FileUploadUtil fileUploadUtil;
 
-    //Tambien podemos inyectar una dependencia usando un constructor, PARA ELLO INSERTAMOS EL @RequiredArgsConstructor
+   //Tambien podemos inyectar una dependencia usando un constructor, PARA ELLO INSERTAMOS EL @RequiredArgsConstructor
     private final FileDownloadUtil fileDownloadUtil;
 
     
@@ -154,11 +157,11 @@ import lombok.RequiredArgsConstructor;
         return responseEntity;
     
     }
-    //Si no hay errores persistimos el proveedor,PARA ELLO comprobamos previamente si nos han enviado una imagen o archivo 
+    //Si no hay errores persistimos el proveedor,PARA ELLO comprobamos previamente si nos han enviado un archivo 
 
             if(!file.isEmpty()){
                 String fileCode = fileUploadUtil.saveFile(file.getOriginalFilename(), file);
-                proveedor.setImagenProveedor(fileCode+"-"+file.getOriginalFilename()); 
+                proveedor.setDocumentacionProveedor(fileCode+"-"+file.getOriginalFilename()); 
                 
                 
  
@@ -170,7 +173,7 @@ import lombok.RequiredArgsConstructor;
                              .size(file.getSize())
                              .build();
  
-                 responseAsMap.put("info de la imagen: ", fileUploadResponse);     
+                 responseAsMap.put("info del documento: ", fileUploadResponse);     
  
              }
              Proveedor proveedorDB = proveedorService.save(proveedor);
@@ -301,9 +304,35 @@ import lombok.RequiredArgsConstructor;
             
         }
         
-        return responseEntity;
-        
-        
+        return responseEntity;  
        
+    }
+
+    /**
+     *  Implementa filedownnload end point API 
+     **/    
+    @GetMapping("/downloadFile/{fileCode}")
+    public ResponseEntity<?> downloadFile(@PathVariable(name = "fileCode") String fileCode) {
+
+        Resource resource = null;
+
+        try {
+            resource = fileDownloadUtil.getFileAsResource(fileCode);
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+        if (resource == null) {
+            return new ResponseEntity<>("File not found ", HttpStatus.NOT_FOUND);
+        }
+
+        String contentType = "application/octet-stream";
+        String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
+
+        return ResponseEntity.ok()
+        .contentType(MediaType.parseMediaType(contentType))
+        .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+        .body(resource);
+
     }
 }

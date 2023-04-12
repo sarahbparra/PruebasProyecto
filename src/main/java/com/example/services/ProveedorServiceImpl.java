@@ -1,13 +1,11 @@
 package com.example.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dao.ProveedorDao;
+import com.example.entities.Administrador;
 import com.example.entities.Proveedor;
 
 import java.util.List;
@@ -44,6 +42,12 @@ public class ProveedorServiceImpl implements ProveedorService {
     @Transactional
     public void delete(Proveedor proveedor) {
          proveedorDao.delete(proveedor);
+    }
+
+    @Override
+    public List<Proveedor> findByAdministrador(Administrador administrador) {
+        
+        return proveedorDao.findByAdministrador(administrador); 
     }
   
    

@@ -70,7 +70,7 @@ public class AdministradorController {
         }
 
         for (Administrador administrador : administradores) {
-            List<Proveedor> proveedoes = proveedorService.findByAdministrador(administrador);
+            List<Proveedor> proveedoes = proveedorService.findByAdministrador(administrador); 
             administrador.setProveedores(proveedoes);
         }
 

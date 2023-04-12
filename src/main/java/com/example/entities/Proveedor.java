@@ -12,9 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.OneToMany; 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,7 +40,7 @@ public class Proveedor implements Serializable{
     private String telefono; 
     private String correo; 
     
-    private String imagenProveedor;
+    private String documentacionProveedor;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) 
     @JsonBackReference

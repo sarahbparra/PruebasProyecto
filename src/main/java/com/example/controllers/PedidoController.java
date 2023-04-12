@@ -40,12 +40,6 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService; 
 
-    @Autowired
-    private FileUploadUtil fileUploadUtil; 
-
-    @Autowired
-    private  FileDownloadUtil fileDownloadUtil; 
-
     @GetMapping
     public ResponseEntity<List<Pedido>> findAll
     (@RequestParam(name = "page", required = false) Integer page, 

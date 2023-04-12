@@ -2,6 +2,7 @@ package com.example.services;
 
 import java.util.List;
 
+import com.example.entities.Administrador;
 import com.example.entities.Proveedor;
 
 
@@ -17,6 +18,8 @@ public interface ProveedorService  {
     public Proveedor save (Proveedor proveedor);
 
     public void delete(Proveedor proveedor);
+
+    public List<Proveedor> findByAdministrador(Administrador administrador);
     
 }
 
