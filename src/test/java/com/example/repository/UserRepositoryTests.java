@@ -14,6 +14,9 @@ import com.example.user.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+import java.util.Optional;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 
@@ -22,11 +25,11 @@ public class UserRepositoryTests {
     @Autowired
     private UserRepository userRepository; 
 
-    private User user0; 
+    private User comprador0; 
 
     @BeforeEach
     void setUp() {
-        user0 = User.builder()
+        comprador0 = User.builder()
                 .userName("Comprador0")
                 .password("123456")
                 .email("user0@gmail.com")
@@ -35,8 +38,8 @@ public class UserRepositoryTests {
     }
 
     @Test
-    @DisplayName("Test para agregar un user")
-    public void testAddUser() {
+    @DisplayName("Test para agregar un comprador")
+    public void testAddComprador() {
         /**
          * Segun el enfoque: Una prueba unitaria se divide en tres partes
          *
@@ -53,7 +56,7 @@ public class UserRepositoryTests {
 
         // given - dado que:
 
-        User user = User.builder()
+        User comprador1 = User.builder()
         .userName("Test Comprador 1")
         .password("123456")
         .email("comprador1@gmail.com")
@@ -61,12 +64,91 @@ public class UserRepositoryTests {
         .build();
 
         // when 
-        User userAdded = userRepository.save(user); 
+        User userAdded = userRepository.save(comprador1); 
 
         // then 
         assertThat(userAdded).isNotNull();
         assertThat(userAdded.getId()).isGreaterThan(0L);
     }
 
-    
+    @DisplayName("Test para listar compradores")
+    @Test
+    public void testFindAllCompradores(){
+
+        // given 
+        User comprador2 = User.builder()
+        .userName("Test Comprador 2")
+        .password("123456")
+        .email("comprador2@gmail.com")
+        .role(Role.COMPRADOR)
+        .build();
+        
+        userRepository.save(comprador0); 
+        userRepository.save(comprador2); 
+
+        // when 
+        List<User> compradores = userRepository.findAll(); 
+
+        // then
+        assertThat(compradores).isNotNull(); 
+        assertThat(compradores.size()).isEqualTo(2); 
+
+    }
+
+    @Test
+    @DisplayName("Test para recuperar un comprador por su ID")
+    public void findCompradorById() {
+
+        // given
+
+        userRepository.save(comprador0);
+
+        // when
+
+        User comprador = userRepository.findById(comprador0.getId()).get();
+
+        // then
+
+        assertThat(comprador.getId()).isNotEqualTo(0L);
+
+    }
+
+    @Test
+    @DisplayName("Test para actualizar un comprador")
+    public void testUpdateComprador() {
+
+        // given
+
+        userRepository.save(comprador0);
+
+        // when
+
+        User compradorGuardado = userRepository.findByEmail(comprador0.getEmail()).get();
+
+        compradorGuardado.setUserName("Prueba");
+        compradorGuardado.setEmail("prueba@gg.com");
+
+        User compradorUpdated = userRepository.save(compradorGuardado);
+
+        // then
+
+        assertThat(compradorUpdated.getEmail()).isEqualTo("prueba@gg.com");
+
+    }
+
+    @DisplayName("Test para eliminar un comprador")
+    @Test
+    public void testDeleteComprador() {
+
+        // given
+        userRepository.save(comprador0);
+
+        // when
+        userRepository.delete(comprador0);
+        Optional<User> optionalComprador = userRepository.findByEmail(comprador0.getEmail());
+
+        // then
+        assertThat(optionalComprador).isEmpty();
+    }
+
 }

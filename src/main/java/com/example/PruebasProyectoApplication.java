@@ -7,31 +7,30 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.example.dao.AdministradorDao;
+import com.example.dao.CompradorDao;
+import com.example.dao.ProductoDao;
+import com.example.dao.ProveedorDao;
 import com.example.entities.Administrador;
 import com.example.entities.Comprador;
 import com.example.entities.Comprador.Genero;
 import com.example.entities.Producto;
 import com.example.entities.Proveedor;
-import com.example.services.AdministradorService;
-import com.example.services.CompradorService;
-import com.example.services.ProductoService;
-import com.example.services.ProveedorService;
-import com.example.user.UserService;
 
 @SpringBootApplication
 public class PruebasProyectoApplication implements CommandLineRunner {
 
 	@Autowired
-	private AdministradorService administradorService;
+	private AdministradorDao administradorService;
 
 	@Autowired
-	private ProveedorService proveedorService;
+	private ProveedorDao proveedorService;
 
 	@Autowired
-	private CompradorService compradorService;
+	private CompradorDao compradorService;
 
 	@Autowired
-	private ProductoService productoService;
+	private ProductoDao productoService;
 
 
 	public static void main(String[] args) {
@@ -79,7 +78,7 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.telefono("telComp1")
 				.correo("proveedor1@mail.COM")
 				.documentacionProveedor("")
-				.administrador(administradorService.findById(1))
+				.administrador(administradorService.findById(1L).get())
 				.productos(productoService.findAll())
 				.build());
 
@@ -90,7 +89,7 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.telefono("telComp2")
 				.correo("proveedor2@mail.COM")
 				.documentacionProveedor("")
-				.administrador(administradorService.findById(2))
+				.administrador(administradorService.findById(2L).get())
 				.productos(productoService.findAll())
 				.build());
 
@@ -107,7 +106,7 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.fechaNacimiento(LocalDate.of(1995, 12, 12))
 				.imagenComprador(null)
 				.genero(Genero.HOMBRE)
-				.administrador(administradorService.findById(1))
+				.administrador(administradorService.findById(1L).get())
 				.build());
 
 		compradorService.save(Comprador.builder()
@@ -119,7 +118,7 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.fechaNacimiento(LocalDate.of(2002, 12, 12))
 				.imagenComprador(null)
 				.genero(Genero.MUJER)
-				.administrador(administradorService.findById(1))
+				.administrador(administradorService.findById(1L).get())
 				.build());
 
 		// Comprador sin productos:
@@ -132,7 +131,7 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.fechaNacimiento(LocalDate.of(3003, 12, 12))
 				.imagenComprador(null)
 				.genero(Genero.MUJER)
-				.administrador(administradorService.findById(1))
+				.administrador(administradorService.findById(1L).get())
 				.build());
 
 		// 3 PRODUCTOS
