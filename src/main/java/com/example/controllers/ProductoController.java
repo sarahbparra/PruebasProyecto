@@ -143,12 +143,13 @@ private FileDownloadUtil fileDownloadUtil;
 
  /**Método que guarda (persiste) un producto en la base de datos */
  @PostMapping
- //(consumes = "multipart/form-data")
+//  ( consumes = "multipart/form-data")
  @Transactional
  public ResponseEntity<Map<String, Object>> insert(@Valid 
  @RequestPart(name = "producto") Producto producto,
-  BindingResult result, @RequestPart(name = "file") MultipartFile file) throws IOException {
-     Map<String, Object> responseAsMap = new HashMap<>();
+  BindingResult result, @RequestPart(name = "file", required = false) MultipartFile file) throws IOException {
+     
+    Map<String, Object> responseAsMap = new HashMap<>();
      ResponseEntity<Map<String, Object>> responseEntity = null;
 
      /** Primero comprobar si hay errores en el producto recibido */
@@ -188,8 +189,6 @@ private FileDownloadUtil fileDownloadUtil;
      }
 
      Producto productoDB = productoService.save(producto);
-
-   
 
      try {
 

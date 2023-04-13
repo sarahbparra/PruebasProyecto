@@ -57,7 +57,6 @@ public class SecurityConfig {
     System.out.println(new SecurityConfig().passwordEncoder().encode("1234"));
     }
     // CONTRASEÑA GENERADA POR ESTE MÉTODO:
-    //$2a$10$5i7KpqAgooo9Ws5IW/GhjOuZ1RTRs39LqtjL8J014vogNLvpXO3BS
 
     /**
      * Se define el método securityFilterChain que recibe como parámetro un objeto

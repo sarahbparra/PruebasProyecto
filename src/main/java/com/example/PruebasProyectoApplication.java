@@ -46,37 +46,44 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 		 * proveedors):
 		 */
 
-		// 3 ADMINISTRADORES
+		
 		administradorService.save(Administrador.builder()
-				.nombre("Admin1")
-				.apellidos("apellidos1")
-				.correo("admin1@gmail.com")
-				.telefono("telAdmin1")
+				.nombre("Irene")
+				.apellidos("González Moreno")
+				.correo("irene@gmail.com")
+				.telefono("123 456 789")
 				.build());
 
 		administradorService.save(Administrador.builder()
-				.nombre("Admin2")
-				.apellidos("apellidos2")
-				.correo("admin2@gmail.com")
-				.telefono("telAdmin2")
+				.nombre("Zineb")
+				.apellidos("Afkir Benjelloun-Andaloussi")
+				.correo("zineb@gmail.com")
+				.telefono("123 456 789")
 				.build());
 
 		// Admin sin proveedores ni compradores:
 
 		administradorService.save(Administrador.builder()
-				.nombre("Admin3")
-				.apellidos("apellidos3")
-				.correo("admin3@gmail.com")
-				.telefono("telAdmin3")
+				.nombre("Sarah")
+				.apellidos("Benabidi Parra")
+				.correo("sarah@gmail.com")
+				.telefono("123 456 789")
 				.build());
+
+			administradorService.save(Administrador.builder()
+				.nombre("Celia")
+				.apellidos("Cava Ruíz")
+				.correo("celia@gmail.com")
+				.telefono("123 456 789")
+				.build());				
 
 		// 3 PROVEEDORES
 		proveedorService.save(Proveedor.builder()
 				.id(1)
-				.nombre("prove1")
-				.apellidos("apellidos1")
-				.telefono("telComp1")
-				.correo("proveedor1@mail.COM")
+				.nombre("Judith")
+				.apellidos("Alende Martínez")
+				.telefono("123 456 789")
+				.correo("judith@gmail.com")
 				.documentacionProveedor("")
 				.administrador(administradorService.findById(1L).get())
 				.productos(productoService.findAll())
@@ -84,14 +91,48 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 
 		proveedorService.save(Proveedor.builder()
 				.id(2)
-				.nombre("prove2")
-				.apellidos("apellidos2")
-				.telefono("telComp2")
-				.correo("proveedor2@mail.COM")
+				.nombre("Salma")
+				.apellidos("Asbayti Sakai")
+				.telefono("123 456 789")
+				.correo("salma@gmail.COM")
 				.documentacionProveedor("")
 				.administrador(administradorService.findById(2L).get())
 				.productos(productoService.findAll())
 				.build());
+
+			proveedorService.save(Proveedor.builder()
+				.id(3)
+				.nombre("María José")
+				.apellidos("Andreu Álvarez")
+				.telefono("123 456 789")
+				.correo("mj@gmail.COM")
+				.documentacionProveedor("")
+				.administrador(administradorService.findById(2L).get())
+				.productos(productoService.findAll())
+				.build());
+
+			proveedorService.save(Proveedor.builder()
+				.id(4)
+				.nombre("Elisabet")
+				.apellidos("Agulló García")
+				.telefono("123 456 789")
+				.correo("elisabet@gmail.COM")
+				.documentacionProveedor("")
+				.administrador(administradorService.findById(3L).get())
+				.productos(productoService.findAll())
+				.build());
+
+			proveedorService.save(Proveedor.builder()
+				.id(5)
+				.nombre("Llanos")
+				.apellidos("Ruíz Moreno")
+				.telefono("123 456 789")
+				.correo("llanos@gmail.COM")
+				.documentacionProveedor("")
+				.administrador(administradorService.findById(4L).get())
+				.productos(productoService.findAll())
+				.build());
+
 
 		// Admin sin proveedores ni compradores:
 
@@ -99,21 +140,21 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 		compradorService.save(Comprador
 				.builder()
 				.id(1)
-				.nombre("Compra1")
-				.apellidos("apellidos1")
-				.correo("comprador1@mail.COM")
-				.telefono("telComp1")
-				.fechaNacimiento(LocalDate.of(1995, 12, 12))
+				.nombre("Cristina")
+				.apellidos("Galindo Velasco")
+				.correo("cristina@gmail.com")
+				.telefono("123 456 789")
+				.fechaNacimiento(LocalDate.of(1999, 12, 12))
 				.imagenComprador(null)
-				.genero(Genero.HOMBRE)
+				.genero(Genero.MUJER)
 				.administrador(administradorService.findById(1L).get())
 				.build());
 
 		compradorService.save(Comprador.builder()
 				.id(2)
-				.nombre("Compra2")
-				.apellidos("apellidos2")
-				.correo("2@mail.com")
+				.nombre("Dayana")
+				.apellidos("Del Villar Gutierrez")
+				.correo("dayana@gmail.com")
 				.telefono("telComp2")
 				.fechaNacimiento(LocalDate.of(2002, 12, 12))
 				.imagenComprador(null)
@@ -121,54 +162,89 @@ public class PruebasProyectoApplication implements CommandLineRunner {
 				.administrador(administradorService.findById(1L).get())
 				.build());
 
-		// Comprador sin productos:
 		compradorService.save(Comprador.builder()
 				.id(3)
-				.nombre("Compra3")
-				.apellidos("apellidos3")
-				.correo("3@mail.com")
-				.telefono("telComp3")
-				.fechaNacimiento(LocalDate.of(3003, 12, 12))
+				.nombre("Aurore Rose Julie")
+				.apellidos("Boudinot")
+				.correo("aurore@gmail.com")
+				.telefono("123 456 789")
+				.fechaNacimiento(LocalDate.of(2000, 04, 17))
 				.imagenComprador(null)
 				.genero(Genero.MUJER)
 				.administrador(administradorService.findById(1L).get())
 				.build());
 
+		compradorService.save(Comprador.builder()
+				.id(4)
+				.nombre("Mara")
+				.apellidos("Romero Diaz")
+				.correo("mara@gmail.com")
+				.telefono("123 456 789")
+				.fechaNacimiento(LocalDate.of(1999, 12, 12))
+				.imagenComprador(null)
+				.genero(Genero.MUJER)
+				.administrador(administradorService.findById(1L).get())
+				.build());
+
+			compradorService.save(Comprador.builder()
+				.id(5)
+				.nombre("Belén")
+				.apellidos("Chocano Collado")
+				.correo("belen@gmail.com")
+				.telefono("123 456 789")
+				.fechaNacimiento(LocalDate.of(1999, 12, 12))
+				.imagenComprador(null)
+				.genero(Genero.MUJER)
+				.administrador(administradorService.findById(1L).get())
+				.build());
+
+
 		// 3 PRODUCTOS
 		productoService.save(Producto.builder()
 				.id(1)
-				.nombre("Producto1")
-				.descripcion("muy rico")
-				.procedencia("")
-				.precio("")
-				.peso(1.0)
-				.volumen(1.0)
+				.nombre("Queso Caserío")
+				.descripcion("Queso de leche de cabra, de pasta prensada y corteza natural.")
+				.procedencia("Aledo")
+				.precio("11.50 €")
+				.peso(300.0)
+				.volumen(0.0)
 				.proveedor(proveedorService.findById(1))
 				.imagenProducto("")
 				.build());
 
 		productoService.save(Producto.builder()
 				.id(2)
-				.nombre("Producto2")
-				.descripcion("muy rico")
-				.procedencia("")
-				.precio("")
-				.peso(2.0)
-				.volumen(2.0)
+				.nombre("Vino de la Ermita")
+				.descripcion("Vino de color rojo intenso con aromas a frutas maduras, especias y notas balsámicas.")
+				.procedencia("Jumilla")
+				.precio("15.50 €")
+				.peso(0.0)
+				.volumen(0.75)
 				.proveedor(proveedorService.findById(2))
 				.imagenProducto("")
 				.build());
 
-		// Producto con proveedor inexistente:
 		productoService.save(Producto.builder()
-				.id(2)
-				.nombre("Producto2")
-				.descripcion("su proveedor no existe, revisalo")
-				.procedencia("")
-				.precio("")
-				.peso(2.0)
-				.volumen(2.0)
+				.id(3)
+				.nombre("Queso fresco de Cabra")
+				.descripcion("Queso elaborado con leche cruda de cabra y tiene un sabor intenso y ligeramente picante.")
+				.procedencia("Totana")
+				.precio("13.70 €")
+				.peso(300.0)
+				.volumen(0.0)
 				.proveedor(proveedorService.findById(4))
+				.imagenProducto("")
+				.build());
+
+			productoService.save(Producto.builder()
+				.id(4)
+				.nombre("Vino Monastrell")
+				.descripcion("Elaborado con la uva homónima, que tiene un característico sabor a frutas negras maduras.")
+				.procedencia("Yecla")
+				.precio("18.50 €")
+				.peso(0.0)
+				.volumen(0.75)
+				.proveedor(proveedorService.findById(2))
 				.imagenProducto("")
 				.build());
 
